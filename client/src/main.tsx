@@ -1,26 +1,26 @@
-import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+import App from "./App";
+import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap for styling
+import "./index.css"; // Import global styles
 
-import App from './App'
-// import HighScores from './pages/HighScores'
-import ErrorPage from './pages/Error'
-import GamePage from './pages/Game'
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <App />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        index: true,
-        element: <GamePage />,
-      }
-    ],
+// Set up Apollo Client for GraphQL API
+const client = new ApolloClient({
+  uri: "http://localhost:3001/graphql", // Change when deployed
+  cache: new InMemoryCache(),
+  headers: {
+    authorization: localStorage.getItem("id_token") ? `Bearer ${localStorage.getItem("id_token")}` : "",
   },
-]);
+});
 
-const rootElement = document.getElementById('root');
-if (rootElement) {
-  ReactDOM.createRoot(rootElement).render(<RouterProvider router={router} />);
-}
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <ApolloProvider client={client}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ApolloProvider>
+  </React.StrictMode>
+);
