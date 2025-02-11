@@ -1,25 +1,24 @@
 import express from 'express';
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@apollo/server/express4';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import typeDefs from './schemas/typeDefs';
+import resolvers from './schemas/resolvers';
+import authMiddleware from './utils/auth';
 
-import db from './config/connection.js';
-import routes from './routes/index.js';
+dotenv.config();
 
-await db();
-
-const PORT = process.env.PORT || 3001;
 const app = express();
+const server = new ApolloServer({ typeDefs, resolvers });
 
-app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 app.use(express.json());
-app.use(routes);
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('../client/dist'));
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-   app.get('*', (_req, res) => {
-    res.sendFile('../client/dist/index.html');
-  });
-}
-
-app.listen(PORT, () => {
-  console.log(`API server running on port ${PORT}!`);
+server.start().then(() => {
+  app.use('/graphql', expressMiddleware(server, { context: authMiddleware }));
+  app.listen(3001, () => console.log('Server running on port 3001'));
 });

@@ -1,8 +1,10 @@
-import { Router } from "express";
-import apiRoutes from './api/index.js';
+import express from 'express';
+import eventRoutes from './api/eventRoutes';
+import userRoutes from './api/userRoutes';
 
-const router = Router();
+const router = express.Router();
 
-router.use('/api', apiRoutes);
+router.use('/events', eventRoutes);
+router.use('/users', userRoutes);
 
 export default router;
