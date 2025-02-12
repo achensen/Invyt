@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { loginUser } from "../utils/api";
 
+interface LoginForm {
+  email: string;
+  password: string;
+}
+
 const Login = () => {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState<LoginForm>({ email: "", password: "" });
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await loginUser(form);
     alert("Login Successful!");

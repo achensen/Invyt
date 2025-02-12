@@ -1,3 +1,4 @@
+import { setToken } from "./auth";
 import axios from "axios";
 import { getToken } from "./auth";
 

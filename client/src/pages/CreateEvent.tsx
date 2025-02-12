@@ -1,12 +1,19 @@
 import { useState } from "react";
 import { createEvent } from "../utils/api";
 
+interface EventForm {
+  title: string;
+  date: string;
+  location: string;
+}
+
 const CreateEvent = () => {
-  const [form, setForm] = useState({ title: "", date: "", location: "" });
+  const [form, setForm] = useState<EventForm>({ title: "", date: "", location: "" });
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await createEvent(form);
     alert("Event Created!");

@@ -2,8 +2,15 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getEvents } from "../utils/api";
 
+interface Event {
+  _id: string;
+  title: string;
+  date: string;
+  location: string;
+}
+
 const Home = () => {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
     getEvents().then((data) => setEvents(data));

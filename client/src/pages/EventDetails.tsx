@@ -2,17 +2,28 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getEventById, rsvpToEvent } from "../utils/api";
 
+interface Event {
+  _id: string;
+  title: string;
+  date: string;
+  location: string;
+}
+
 const EventDetails = () => {
-  const { id } = useParams();
-  const [event, setEvent] = useState(null);
+  const { id } = useParams<{ id: string }>();
+  const [event, setEvent] = useState<Event | null>(null);
 
   useEffect(() => {
-    getEventById(id).then((data) => setEvent(data));
+    if (id) {
+      getEventById(id).then((data) => setEvent(data));
+    }
   }, [id]);
 
   const handleRSVP = async () => {
-    await rsvpToEvent(id);
-    alert("RSVP Confirmed!");
+    if (id) {
+      await rsvpToEvent(id);
+      alert("RSVP Confirmed!");
+    }
   };
 
   if (!event) return <p>Loading...</p>;
