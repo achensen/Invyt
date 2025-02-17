@@ -1,4 +1,4 @@
-import { IWord, Word } from './Word.js';
-import { IGame, Game } from './Game.js';
+import User from './User.js';
+import Event from './Event.js';
 
-export { IWord, Word, IGame, Game };
+export { User, Event };
