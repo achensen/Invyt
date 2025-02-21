@@ -12,7 +12,7 @@ const Footer = () => {
           >
             ❤️
           </span>{' '}
-          by the Word Guess team.
+          by the Invyt team.
         </h4>
       </div>
     </footer>
