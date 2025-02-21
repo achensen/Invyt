@@ -4,13 +4,13 @@ import EventDetails from "./pages/EventDetails";
 import CreateEvent from "./pages/CreateEvent";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import Header from "./components/Header";
+import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 
 function App() {
   return (
     <>
-      <Header />
+      <Navigation />
       <main className="container mt-4">
         <Routes>
           <Route path="/" element={<Home />} />

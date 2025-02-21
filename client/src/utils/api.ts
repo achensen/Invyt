@@ -81,40 +81,56 @@ export const rsvpToEvent = async (eventId: string) => {
 
 // User login
 export const loginUser = async (credentials: { email: string; password: string }) => {
-  const response = await api.post("", {
-    query: `
-      mutation {
-        login(email: "${credentials.email}", password: "${credentials.password}") {
-          token
-          user {
-            _id
-            email
+  try {
+    const response = await api.post("", {
+      query: `
+        mutation {
+          login(email: "${credentials.email}", password: "${credentials.password}") {
+            token
+            user {
+              _id
+              email
+            }
           }
         }
-      }
-    `,
-  });
+      `,
+    });
 
-  const token = response.data.data.login.token;
-  setToken(token);
+    console.log("Login Response:", response.data);
+    
+    const { token, user } = response.data.data.login;
+    setToken(token);
+    return user;
+  } catch (error) {
+    console.error("Login GraphQL Error:", error);
+    throw error;
+  }
 };
 
 // User signup
 export const registerUser = async (userData: { name: string; email: string; password: string }) => {
-  const response = await api.post("", {
-    query: `
-      mutation {
-        register(name: "${userData.name}", email: "${userData.email}", password: "${userData.password}") {
-          token
-          user {
-            _id
-            email
+  try {
+    const response = await api.post("", {
+      query: `
+        mutation {
+          register(name: "${userData.name}", email: "${userData.email}", password: "${userData.password}") {
+            token
+            user {
+              _id
+              email
+            }
           }
         }
-      }
-    `,
-  });
+      `,
+    });
 
-  const token = response.data.data.register.token;
-  setToken(token);
+    console.log("Signup Response:", response.data);
+
+    const { token, user } = response.data.data.register;
+    setToken(token);
+    return user;
+  } catch (error) {
+    console.error("Signup GraphQL Error:", error);
+    throw error;
+  }
 };

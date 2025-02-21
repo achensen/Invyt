@@ -23,9 +23,14 @@ const typeDefs = gql`
     event(id: ID!): Event
   }
 
+  type AuthPayload {
+    token: String!
+    user: User!
+  }
+
   type Mutation {
-    register(name: String!, email: String!, password: String!): User
-    login(email: String!, password: String!): User
+    register(name: String!, email: String!, password: String!): AuthPayload
+    login(email: String!, password: String!): AuthPayload
     createEvent(title: String!, date: String!, location: String!): Event
     rsvp(eventId: ID!): Event
   }
