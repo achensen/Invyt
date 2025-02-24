@@ -1,12 +1,21 @@
 import { Link, useNavigate } from "react-router-dom";
-import { getUserFromToken, isAuthenticated, removeToken } from "../utils/auth";
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
+import { removeToken } from "../utils/auth";
 
 const Navigation = () => {
   const navigate = useNavigate();
-  const user = getUserFromToken();
+  const userContext = useContext(UserContext);
+
+  if (!userContext) {
+    return null;
+  }
+
+  const { user, updateUser } = userContext;
 
   const handleLogout = () => {
     removeToken();
+    updateUser();
     navigate("/login");
   };
 
@@ -18,9 +27,9 @@ const Navigation = () => {
           <Link to="/create-event" className="mx-2">Create Event</Link>
         </div>
         <div>
-          {isAuthenticated() ? (
+          {user ? (
             <>
-              <span className="mx-2">Welcome, {user?.name || "User"}!</span>
+              <span className="mx-2">Welcome, {user.name}!</span>
               <button className="btn btn-danger btn-sm" onClick={handleLogout}>Logout</button>
             </>
           ) : (
