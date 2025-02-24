@@ -36,7 +36,7 @@ server.start().then(() => {
     "/graphql",
     expressMiddleware(server, {
       context: async ({ req }) => {
-        const user = await authMiddleware(req); // Ensure async call
+        const user = await authMiddleware({ req });
         return { user };
       },
     })

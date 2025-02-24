@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Request } from "express";
 
-const authMiddleware = async (req: Request) => {
+const authMiddleware = ({ req }: { req: Request }) => {
   const token = req.headers.authorization || "";
   if (!token) return null;
 
