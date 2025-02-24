@@ -4,11 +4,11 @@ import { BrowserRouter } from "react-router-dom";
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../src/assets/styles/index.css";
+import "./assets/styles/index.css";
 
 // Set up Apollo Client for GraphQL API
 const client = new ApolloClient({
-  uri: "http://localhost:3001/graphql", // Ensure backend is running here
+  uri: "http://localhost:3001/graphql", // Ensure backend is running
   cache: new InMemoryCache(),
   headers: {
     authorization: localStorage.getItem("id_token") ? `Bearer ${localStorage.getItem("id_token")}` : "",

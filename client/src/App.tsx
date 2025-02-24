@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import EventDetails from "./pages/EventDetails";
 import CreateEvent from "./pages/CreateEvent";
@@ -10,7 +10,7 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 
 function App() {
   return (
-    <Router>
+    <>
       <Navigation />
       <main className="container mt-4">
         <Routes>
@@ -25,7 +25,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
-    </Router>
+    </>
   );
 }
 
