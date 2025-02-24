@@ -11,25 +11,23 @@ const resolvers = {
     event: async (_: any, { id }: { id: string }) => await Event.findById(id),
   },
   Mutation: {
-    Mutation: {
-      register: async (_: any, { name, email, password }: any) => {
-        if (!name || !email || !password) {
-          throw new Error("All fields are required.");
-        }
-    
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-          throw new Error("User already exists.");
-        }
-    
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new User({ name, email, password: hashedPassword });
-        await user.save();
-    
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || "secret", { expiresIn: "1h" });
-    
-        return { token, user };
+    register: async (_: any, { name, email, password }: any) => {
+      if (!name || !email || !password) {
+        throw new Error("All fields are required.");
       }
+
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        throw new Error("User already exists.");
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const user = new User({ name, email, password: hashedPassword });
+      await user.save();
+
+      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || "secret", { expiresIn: "1h" });
+
+      return { token, user };
     },
     login: async (_: any, { email, password }: any) => {
       const user = await User.findOne({ email });

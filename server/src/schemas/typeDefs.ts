@@ -16,16 +16,16 @@ const typeDefs = gql`
     attendees: [User]
   }
 
+  type AuthPayload {
+    token: String!
+    user: User!
+  }
+
   type Query {
     users: [User]
     user(id: ID!): User
     events: [Event]
     event(id: ID!): Event
-  }
-
-  type AuthPayload {
-    token: String!
-    user: User!
   }
 
   type Mutation {
