@@ -107,7 +107,7 @@ export const registerUser = async (userData: { name: string; email: string; pass
 
     const { token, user } = response.data.data.register;
     setToken(token);
-    updateUser();
+    updateUser(); // ✅ Updates Navbar after signup
     return user;
   } catch (error) {
     console.error("Signup GraphQL Error:", error);
@@ -138,7 +138,7 @@ export const loginUser = async (credentials: { email: string; password: string }
 
     const { token, user } = response.data.data.login;
     setToken(token);
-    updateUser();
+    updateUser(); // ✅ Updates Navbar after login
     return user;
   } catch (error) {
     console.error("Login GraphQL Error:", error);
@@ -146,3 +146,4 @@ export const loginUser = async (credentials: { email: string; password: string }
     throw error;
   }
 };
+

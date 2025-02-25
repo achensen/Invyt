@@ -35,6 +35,14 @@ const Signup = () => {
           <label className="form-label">Full Name</label>
           <input className="form-control" name="name" value={form.name} onChange={handleChange} required />
         </div>
+        <div className="mb-3">
+          <label className="form-label">Email</label>
+          <input type="email" className="form-control" name="email" value={form.email} onChange={handleChange} required />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Password</label>
+          <input type="password" className="form-control" name="password" value={form.password} onChange={handleChange} required />
+        </div>
         <button type="submit" className="btn btn-primary w-100">Sign Up</button>
       </form>
     </div>

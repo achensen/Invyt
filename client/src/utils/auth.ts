@@ -9,6 +9,7 @@ interface DecodedUser extends JwtPayload {
 
 // Store token in local storage
 export const setToken = (token: string) => {
+  console.log("🔐 Storing Token:", token);
   localStorage.setItem("id_token", token);
 };
 
@@ -19,6 +20,7 @@ export const getToken = () => {
 
 // Remove token (logout function)
 export const removeToken = () => {
+  console.log("🚪 Removing Token");
   localStorage.removeItem("id_token");
 };
 
@@ -27,8 +29,11 @@ export const getUserFromToken = (): DecodedUser | null => {
   const token = getToken();
   if (!token) return null;
   try {
-    return jwtDecode<DecodedUser>(token);
+    const decoded = jwtDecode<DecodedUser>(token);
+    console.log("👤 Decoded User:", decoded); // ✅ Debugging
+    return decoded;
   } catch (error) {
+    console.error("❌ Error Decoding Token:", error);
     return null;
   }
 };

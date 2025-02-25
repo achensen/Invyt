@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
-import { getUserFromToken } from "../utils/auth";
+import { getUserFromToken, getToken } from "../utils/auth";
 
 // Define context type
 interface UserContextType {
@@ -16,11 +16,23 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   // Update user when token changes
   const updateUser = () => {
+    console.log("🔄 Updating User Context...");
     setUser(getUserFromToken());
   };
 
   useEffect(() => {
     updateUser();
+
+    // Listen for token changes in localStorage
+    const handleStorageChange = () => {
+      console.log("📢 Token Changed! Refreshing User...");
+      updateUser();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
   return (
