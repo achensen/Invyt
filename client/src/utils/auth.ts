@@ -3,7 +3,7 @@ import { jwtDecode, JwtPayload } from "jwt-decode";
 // Define a type for the decoded JWT
 interface DecodedUser extends JwtPayload {
   _id: string;
-  name: string;
+  name: string; // Ensure name exists
   email: string;
 }
 
@@ -30,7 +30,7 @@ export const getUserFromToken = (): DecodedUser | null => {
   if (!token) return null;
   try {
     const decoded = jwtDecode<DecodedUser>(token);
-    console.log("👤 Decoded User:", decoded); // ✅ Debugging
+    console.log("👤 Decoded User from Token:", decoded); // ✅ Debugging
     return decoded;
   } catch (error) {
     console.error("❌ Error Decoding Token:", error);

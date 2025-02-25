@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
-import { getUserFromToken, getToken } from "../utils/auth";
+import { getUserFromToken } from "../utils/auth";
 
 // Define context type
 interface UserContextType {

@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { loginUser } from "../utils/api";
+import { UserContext } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 interface LoginForm {
   email: string;
@@ -8,14 +10,20 @@ interface LoginForm {
 
 const Login = () => {
   const [form, setForm] = useState<LoginForm>({ email: "", password: "" });
+  const userContext = useContext(UserContext);
+  const navigate = useNavigate();
+
+  if (!userContext) return null;
+
+  const { updateUser } = userContext;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await loginUser(form);
-    alert("Login Successful!");
+    await loginUser(form, updateUser); // ✅ Pass `updateUser` as second argument
+    navigate("/");
   };
 
   return (
