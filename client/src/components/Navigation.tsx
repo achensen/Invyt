@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { removeToken } from "../utils/auth";
 
@@ -15,13 +15,9 @@ const Navigation = () => {
 
   const handleLogout = () => {
     removeToken();
-    updateUser();
+    updateUser(null);
     navigate("/login");
   };
-
-  useEffect(() => {
-    updateUser();
-  }, []);
 
   return (
     <header>
@@ -33,7 +29,7 @@ const Navigation = () => {
         <div>
           {user ? (
             <>
-              <span className="mx-2">Welcome, {user.name}!</span> {/* ✅ Fix applied */}
+              <span className="mx-2">Welcome, {user.name}!</span>
               <button className="btn btn-danger btn-sm" onClick={handleLogout}>Logout</button>
             </>
           ) : (

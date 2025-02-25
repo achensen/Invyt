@@ -7,6 +7,7 @@ import Signup from "./pages/Signup";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import RedirectIfLoggedIn from "./utils/RedirectIfLoggedIn";
 
 function App() {
   return (
@@ -16,11 +17,14 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/event/:id" element={<EventDetails />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="/create-event" element={<CreateEvent />} />
+          </Route>
+          {/* Redirect Logged-in Users Away */}
+          <Route element={<RedirectIfLoggedIn />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
           </Route>
         </Routes>
       </main>

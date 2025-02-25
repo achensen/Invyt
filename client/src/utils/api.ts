@@ -80,7 +80,38 @@ export const rsvpToEvent = async (eventId: string) => {
 };
 
 // User login
-export const registerUser = async (userData: { name: string; email: string; password: string }, updateUser: () => void) => {
+export const loginUser = async (credentials: { email: string; password: string }, updateUser: (newUser: any) => void) => {
+  try {
+    const response = await api.post("", {
+      query: `
+        mutation {
+          login(email: "${credentials.email}", password: "${credentials.password}") {
+            token
+            user {
+              _id
+              name
+              email
+            }
+          }
+        }
+      `,
+    });
+
+    console.log("Login Response:", response.data);
+
+    const { token, user } = response.data.data.login;
+    setToken(token);
+    updateUser(user);
+    return user;
+  } catch (error) {
+    console.error("Login GraphQL Error:", error);
+    alert("Login failed. Please try again.");
+    throw error;
+  }
+};
+
+// User signup
+export const registerUser = async (userData: { name: string; email: string; password: string }, updateUser: (newUser: any) => void) => {
   try {
     const response = await api.post("", {
       query: `
@@ -107,7 +138,7 @@ export const registerUser = async (userData: { name: string; email: string; pass
 
     const { token, user } = response.data.data.register;
     setToken(token);
-    updateUser(); // ✅ Updates Navbar after signup
+    updateUser(user);
     return user;
   } catch (error) {
     console.error("Signup GraphQL Error:", error);
@@ -115,35 +146,3 @@ export const registerUser = async (userData: { name: string; email: string; pass
     throw error;
   }
 };
-
-// User login
-export const loginUser = async (credentials: { email: string; password: string }, updateUser: () => void) => {
-  try {
-    const response = await api.post("", {
-      query: `
-        mutation {
-          login(email: "${credentials.email}", password: "${credentials.password}") {
-            token
-            user {
-              _id
-              name
-              email
-            }
-          }
-        }
-      `,
-    });
-
-    console.log("Login Response:", response.data);
-
-    const { token, user } = response.data.data.login;
-    setToken(token);
-    updateUser(); // ✅ Updates Navbar after login
-    return user;
-  } catch (error) {
-    console.error("Login GraphQL Error:", error);
-    alert("Login failed. Please try again.");
-    throw error;
-  }
-};
-
