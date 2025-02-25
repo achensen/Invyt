@@ -3,59 +3,54 @@ import { createEvent } from "../utils/api";
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
-interface EventForm {
-  title: string;
-  date: string;
-  location: string;
-  recipients: string[];
-}
-
 const CreateEvent = () => {
-  const [form, setForm] = useState<EventForm>({ title: "", date: "", location: "", recipients: [] });
-  const [email, setEmail] = useState(""); // Stores the current email input
   const userContext = useContext(UserContext);
   const navigate = useNavigate();
 
-  if (!userContext?.user) return <p>You must be logged in to create an event.</p>;
+  if (!userContext?.user) {
+    return <p>You must be logged in to create an event. <a href="/signup">Sign in</a></p>;
+  }
+
+  const [form, setForm] = useState({
+    title: "",
+    date: "",
+    location: "",
+    recipients: [] as string[], // Ensure recipients is an array of strings
+  });
+
+  const [email, setEmail] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  // Add email to the list
   const handleAddRecipient = () => {
-    if (email.trim() && !form.recipients.includes(email)) {
-      setForm({ ...form, recipients: [...form.recipients, email.trim()] });
+    if (email.trim() && !form.recipients.includes(email.trim())) {
+      setForm((prev) => ({ ...prev, recipients: [...prev.recipients, email.trim()] }));
       setEmail("");
     }
-  };
+  };  
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
-    // Ensure the last email entered is added before submitting
-    if (email.trim() && !form.recipients.includes(email)) {
-      form.recipients.push(email.trim());
-      setEmail(""); 
-    }
-  
+
     try {
-      if (!userContext.user) {
-        console.error("User context is missing.");
-        return;
-      }
-  
-      const newEvent = await createEvent(form);
-  
+      const newEvent = await createEvent({
+        title: form.title,
+        date: form.date,
+        location: form.location,
+        recipients: form.recipients,
+      });
+
       if (!newEvent) {
         console.error("Failed to create event.");
         return;
       }
-  
+
       navigate(`/event/${newEvent._id}`);
     } catch (error) {
       console.error("Error creating event:", error);
     }
-  };  
+  };
 
   return (
     <div className="container mt-4">

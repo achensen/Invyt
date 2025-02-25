@@ -1,47 +1,43 @@
-import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
-import { removeToken } from "../utils/auth";
+import { Link } from "react-router-dom";
 
 const Navigation = () => {
-  const navigate = useNavigate();
   const userContext = useContext(UserContext);
 
-  if (!userContext) {
-    return null;
-  }
+  if (!userContext) return null;
 
-  const { user, updateUser } = userContext;
-
-  const handleLogout = () => {
-    removeToken();
-    localStorage.removeItem("user_data");
-    updateUser(null);
-    navigate("/login");
-  };
+  const { user, logout } = userContext;
 
   return (
-    <header>
-      <nav className="d-flex justify-content-between align-items-center p-3 bg-light">
-        <div>
-          <Link to="/" className="mx-2">Home</Link>
-          <Link to="/create-event" className="mx-2">Create Event</Link>
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <div className="container">
+        <Link className="navbar-brand" to="/">Invyt</Link>
+        <div className="collapse navbar-collapse">
+          <ul className="navbar-nav ms-auto">
+            {user ? (
+              <>
+                <li className="nav-item">
+                  <span className="nav-link">Welcome, {user.name}!</span>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/create-event">Create Event</Link>
+                </li>
+                <li className="nav-item">
+                  <button className="btn btn-outline-danger" onClick={logout}>Logout</button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <a href="http://localhost:3001/auth/google" className="nav-link">Login</a>
+                </li>
+              </>
+            )}
+          </ul>
         </div>
-        <div>
-          {user ? (
-            <>
-              <span className="mx-2">Welcome, {user.name}!</span>
-              <button className="btn btn-danger btn-sm" onClick={handleLogout}>Logout</button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="mx-2">Login</Link>
-              <Link to="/signup" className="mx-2">Signup</Link>
-            </>
-          )}
-        </div>
-      </nav>
-    </header>
+      </div>
+    </nav>
   );
 };
 

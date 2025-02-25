@@ -1,12 +1,14 @@
 import jwt from "jsonwebtoken";
 import { Request } from "express";
 
+// Define User Data Structure
 interface DecodedUser {
   userId: string;
   name: string;
   email: string;
 }
 
+// Middleware to Verify JWT Tokens
 const authMiddleware = ({ req }: { req: Request }) => {
   const authHeader = req.headers.authorization;
 
@@ -15,22 +17,20 @@ const authMiddleware = ({ req }: { req: Request }) => {
     return null;
   }
 
-  const token = authHeader.replace("Bearer ", "");
+  const token = authHeader.replace("Bearer ", ""); // Extract JWT token
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || "secret") as DecodedUser;
     console.log("✅ Token Decoded:", decoded);
     return decoded;
   } catch (error) {
-    if (error instanceof Error) {
-      if (error.name === "TokenExpiredError") {
-        console.error("❌ JWT Expired:", error.message);
-      } else {
-        console.error("❌ Invalid Token:", error.message);
-      }
-    } else {
-      console.error("❌ Unknown Error:", error);
+    console.error("❌ Invalid Token:", error);
+
+    // Handle Expired Token Case
+    if (error instanceof jwt.TokenExpiredError) {
+      console.log("⏳ Token has expired. Consider requesting a refresh token.");
     }
+
     return null;
   }
 };

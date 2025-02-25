@@ -17,7 +17,11 @@ const EventDetails = () => {
 
   useEffect(() => {
     if (id) {
-      getEventById(id).then((data) => setEvent(data));
+      getEventById(id)
+        .then((data) => {
+          if (data) setEvent(data);
+        })
+        .catch((error) => console.error("Error fetching event:", error));
     }
   }, [id]);
 
@@ -30,7 +34,7 @@ const EventDetails = () => {
     }
   };
 
-  if (!event) return <p>Loading...</p>;
+  if (!event) return <p>Loading event details...</p>;
 
   return (
     <div className="container mt-4">
@@ -39,21 +43,13 @@ const EventDetails = () => {
       <p>Location: {event.location}</p>
       <div className="mt-3">
         <label className="form-label">Enter your name:</label>
-        <input
-          className="form-control mb-2"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
+        <input className="form-control mb-2" type="text" value={name} onChange={(e) => setName(e.target.value)} required />
         <label className="form-label">RSVP:</label>
         <select className="form-select mb-2" value={response} onChange={(e) => setResponse(e.target.value as "yes" | "no")}>
           <option value="yes">Yes</option>
           <option value="no">No</option>
         </select>
-        <button className="btn btn-success w-100" onClick={handleRSVP}>
-          Submit RSVP
-        </button>
+        <button className="btn btn-success w-100" onClick={handleRSVP}>Submit RSVP</button>
       </div>
     </div>
   );

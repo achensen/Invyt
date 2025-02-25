@@ -2,27 +2,44 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
+import session from "express-session";
+import passport from "passport";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import cors from "cors";
 import mongoose from "mongoose";
+import authRoutes from "./routes/auth.js";
 import typeDefs from "./schemas/typeDefs.js";
 import resolvers from "./schemas/resolvers.js";
 import authMiddleware from "./utils/auth.js";
-import authRoutes from "./routes/auth.js";
 
 const app = express();
 
-// CORS configuration to allow frontend requests
+// CORS Configuration
 app.use(
   cors({
-    origin: "http://127.0.0.1:3000", // Allow frontend
-    credentials: true, // Allow authentication cookies
+    origin: "http://127.0.0.1:3000",
+    credentials: true,
   })
 );
 
 app.use(express.json());
 
+// Configure Sessions (Required for Passport)
+app.use(
+  session({
+    secret: process.env.JWT_SECRET!,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // Set to true if using HTTPS
+  })
+);
+
+// Initialize Passport (Fix TypeScript Issue)
+app.use(passport.initialize() as express.RequestHandler);
+app.use(passport.session() as express.RequestHandler);
+
+// Authentication Routes
 app.use("/auth", authRoutes);
 
 const MONGO_URI = process.env.MONGO_URI || "";
@@ -46,7 +63,7 @@ server.start().then(() => {
     "/graphql",
     expressMiddleware(server, {
       context: async ({ req }) => {
-        const user = authMiddleware({ req }); // Extract user from token
+        const user = authMiddleware({ req });
         console.log("📌 User Context Middleware:", user);
         return { user };
       },

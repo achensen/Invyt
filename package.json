@@ -40,8 +40,6 @@
     "@apollo/client": "^3.12.11",
     "@types/passport": "^1.0.17",
     "bootstrap": "^5.3.3",
-    "graphql": "^16.10.0",
-    "passport": "^0.7.0",
-    "passport-google-oauth20": "^2.0.0"
+    "graphql": "^16.10.0"
   }
 }

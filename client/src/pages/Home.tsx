@@ -13,13 +13,14 @@ const Home = () => {
   useEffect(() => {
     if (user) {
       getEvents()
-        .then((data) => setEvents(data))
+        .then((data) => setEvents(data || [])) // Ensure it never sets null
         .catch((error) => console.error("Error fetching events:", error));
     }
   }, [user]);
 
+  // Show this message if no user is logged in
   if (!user) {
-    return <h2>Please log in to see events.</h2>;
+    return <h2 className="text-center mt-4">Please log in to see events.</h2>;
   }
 
   return (

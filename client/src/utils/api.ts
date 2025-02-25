@@ -1,80 +1,100 @@
 import axios from "axios";
-import { getToken } from "./auth";
+import { getToken, setToken, removeToken } from "./auth";
 
-// Create a base Axios instance
+// Create Axios Instance
 const api = axios.create({
   baseURL: "http://localhost:3001/graphql",
-  headers: {
-    "Content-Type": "application/json",
-  },
+  headers: { "Content-Type": "application/json" },
 });
 
-// Ensure Authorization Header is included if user is authenticated
-api.interceptors.request.use((config) => {
-  const token = getToken();
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+// Attach JWT Token to Every Request
+api.interceptors.request.use(async (config) => {
+  let token = getToken();
+  if (!token) return config;
+
+  config.headers.Authorization = `Bearer ${token}`;
+
+  try {
+    // Check Token Expiry & Refresh If Needed
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    if (payload.exp * 1000 < Date.now()) {
+      console.log("⏳ Token expired, refreshing...");
+      const res = await axios.get("http://localhost:3001/auth/refresh-token", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (res.data.accessToken) {
+        setToken(res.data.accessToken);
+        config.headers.Authorization = `Bearer ${res.data.accessToken}`;
+      } else {
+        removeToken();
+      }
+    }
+  } catch (err) {
+    console.error("Token refresh error:", err);
+    removeToken();
   }
+
   return config;
 });
 
-// Fetch all events (Only events created by the authenticated user)
+// 🔹 Fetch all events
 export const getEvents = async () => {
-  try {
-    const response = await api.post("", {
-      query: `
-        query {
-          events {
-            _id
-            title
-            date
-            location
-          }
+  const response = await api.post("", {
+    query: `
+      query {
+        events {
+          _id
+          title
+          date
+          location
         }
-      `,
-    });
+      }
+    `,
+  });
 
-    if (response.data.errors) {
-      console.error("GraphQL Event Fetch Error:", response.data.errors);
-      return [];
-    }
-
-    return response.data.data.events;
-  } catch (error) {
-    console.error("Event Fetch GraphQL Error:", error);
-    return [];
-  }
+  return response.data.data?.events || [];
 };
 
-// Fetch a single event by ID
+// 🔹 Fetch a single event by ID
 export const getEventById = async (id: string) => {
+  const response = await api.post("", {
+    query: `
+      query {
+        event(id: "${id}") {
+          _id
+          title
+          date
+          location
+        }
+      }
+    `,
+  });
+
+  return response.data.data?.event || null;
+};
+
+// 🔹 RSVP to an event
+export const rsvpToEvent = async (eventId: string, name: string, response: "yes" | "no") => {
   try {
-    const response = await api.post("", {
+    const res = await api.post("", {
       query: `
-        query {
-          event(id: "${id}") {
+        mutation {
+          rsvp(eventId: "${eventId}", name: "${name}", response: "${response}") {
             _id
-            title
-            date
-            location
           }
         }
       `,
     });
 
-    if (response.data.errors) {
-      console.error("GraphQL Event Fetch Error:", response.data.errors);
-      return null;
-    }
-
-    return response.data.data.event;
+    return res.data.data?.rsvp || null;
   } catch (error) {
-    console.error("Event Fetch GraphQL Error:", error);
-    return null;
+    console.error("RSVP GraphQL Error:", error);
+    throw error;
   }
 };
 
-// Create an event (Authenticated User Only)
+// 🔹 Create an event
 export const createEvent = async (eventData: { title: string; date: string; location: string; recipients: string[] }) => {
   try {
     const response = await api.post("", {
@@ -85,56 +105,23 @@ export const createEvent = async (eventData: { title: string; date: string; loca
           }
         }
       `,
-      variables: {
-        title: eventData.title,
-        date: eventData.date,
-        location: eventData.location,
-        recipients: eventData.recipients,
-      },
+      variables: eventData,
     });
 
-    if (response.data.errors) {
-      console.error("GraphQL Create Event Error:", response.data.errors);
-      alert(response.data.errors[0].message);
-      return null;
-    }
-
-    return response.data.data.createEvent;
+    return response.data.data?.createEvent || null;
   } catch (error) {
     console.error("Create Event GraphQL Error:", error);
-    alert("Failed to create event.");
-    return null;
+    throw error;
   }
 };
 
-// RSVP to an event
-export const rsvpToEvent = async (eventId: string, name: string, response: "yes" | "no") => {
-  try {
-    const res = await api.post("", {
-      query: `
-        mutation RSVP($eventId: ID!, $name: String!, $response: String!) {
-          rsvp(eventId: $eventId, name: $name, response: $response) {
-            _id
-          }
-        }
-      `,
-      variables: {
-        eventId,
-        name,
-        response,
-      },
-    });
+// 🔹 Login User
+export const loginUser = async () => {
+  window.location.href = "http://localhost:3001/auth/google";
+};
 
-    if (res.data.errors) {
-      console.error("GraphQL RSVP Error:", res.data.errors);
-      alert(res.data.errors[0].message);
-      return null;
-    }
-
-    return res.data.data.rsvp;
-  } catch (error) {
-    console.error("RSVP GraphQL Error:", error);
-    alert("Failed to RSVP.");
-    return null;
-  }
+// 🔹 Logout User
+export const logoutUser = () => {
+  removeToken();
+  window.location.href = "/";
 };

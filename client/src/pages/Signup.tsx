@@ -1,28 +1,26 @@
-import { useContext, useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { UserContext } from "../context/UserContext";
-import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const userContext = useContext(UserContext);
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if a token was provided in the URL after Google OAuth redirect
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+
+    if (token) {
+      localStorage.setItem("token", token);
+      window.location.href = "/"; // Redirect to Home
+    }
+  }, []);
 
   if (!userContext) return null;
 
-  const { user } = userContext;
-
-  // Redirect if already logged in
-  useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  }, [user, navigate]);
-
   return (
-    <div className="container mt-4 text-center">
-      <h1>Sign Up</h1>
-      <p>You must sign in with Google to use Invyt.</p>
-
-      {/* Google Sign-In Button */}
+    <div className="container mt-4">
+      <h1>Sign Up / Login</h1>
+      <p>Sign in with Google to create an account.</p>
       <a href="http://localhost:3001/auth/google" className="btn btn-danger">
         Sign in with Google
       </a>

@@ -7,23 +7,29 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/styles/index.css";
 import { UserProvider } from "./context/UserContext";
 
+// Get token securely
+const getAuthToken = () => {
+  const token = localStorage.getItem("id_token");
+  return token ? `Bearer ${token}` : "";
+};
+
 // Set up Apollo Client for GraphQL API
 const client = new ApolloClient({
   uri: "http://localhost:3001/graphql",
   cache: new InMemoryCache(),
   headers: {
-    authorization: localStorage.getItem("id_token") ? `Bearer ${localStorage.getItem("id_token")}` : "",
+    authorization: getAuthToken(),
   },
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ApolloProvider client={client}>
-      <UserProvider>
-        <BrowserRouter>
+    <BrowserRouter>
+      <ApolloProvider client={client}>
+        <UserProvider>
           <App />
-        </BrowserRouter>
-      </UserProvider>
-    </ApolloProvider>
+        </UserProvider>
+      </ApolloProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
