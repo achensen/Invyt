@@ -37,6 +37,7 @@ server.start().then(() => {
     expressMiddleware(server, {
       context: async ({ req }) => {
         const user = await authMiddleware({ req });
+        console.log("📌 User Context Middleware:", user);
         return { user };
       },
     })

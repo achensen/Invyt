@@ -5,7 +5,7 @@ import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/styles/index.css";
-import { UserProvider } from "./context/UserContext"; // ✅ Import User Context
+import { UserProvider } from "./context/UserContext";
 
 // Set up Apollo Client for GraphQL API
 const client = new ApolloClient({
@@ -19,7 +19,7 @@ const client = new ApolloClient({
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <UserProvider> {/* ✅ Wrap App with UserProvider */}
+      <UserProvider>
         <BrowserRouter>
           <App />
         </BrowserRouter>

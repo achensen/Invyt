@@ -13,7 +13,14 @@ const typeDefs = gql`
     title: String!
     date: String!
     location: String!
-    attendees: [User]
+    recipients: [String!]!
+    createdBy: User!
+    attendees: [RSVP!]
+  }
+
+  type RSVP {
+    name: String!
+    response: String!
   }
 
   type AuthPayload {
@@ -31,8 +38,8 @@ const typeDefs = gql`
   type Mutation {
     register(name: String!, email: String!, password: String!): AuthPayload
     login(email: String!, password: String!): AuthPayload
-    createEvent(title: String!, date: String!, location: String!): Event
-    rsvp(eventId: ID!): Event
+    createEvent(title: String!, date: String!, location: String!, recipients: [String!]!): Event
+    rsvp(eventId: ID!, name: String!, response: String!): Event
   }
 `;
 

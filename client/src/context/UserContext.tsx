@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
-import { getUserFromToken } from "../utils/auth"; // ✅ Removed getToken
+import { getUserFromToken } from "../utils/auth";
 
 // Define context type
 interface UserContextType {
@@ -12,12 +12,18 @@ export const UserContext = createContext<UserContextType | undefined>(undefined)
 
 // Context provider component
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState(getUserFromToken());
+  const storedUser = localStorage.getItem("user_data");
+  const [user, setUser] = useState(storedUser ? JSON.parse(storedUser) : getUserFromToken());
 
-  // Update user state directly instead of decoding JWT every time
+  // Update user state and store in LocalStorage
   const updateUser = (newUser: { _id: string; name: string; email: string } | null) => {
     console.log("🔄 Updating User Context:", newUser);
     setUser(newUser);
+    if (newUser) {
+      localStorage.setItem("user_data", JSON.stringify(newUser));
+    } else {
+      localStorage.removeItem("user_data");
+    }
   };
 
   useEffect(() => {

@@ -15,6 +15,7 @@ const Navigation = () => {
 
   const handleLogout = () => {
     removeToken();
+    localStorage.removeItem("user_data");
     updateUser(null);
     navigate("/login");
   };

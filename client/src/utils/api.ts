@@ -54,29 +54,38 @@ export const getEventById = async (id: string) => {
 };
 
 // Create an event
-export const createEvent = async (eventData: { title: string; date: string; location: string }) => {
-  await api.post("", {
-    query: `
-      mutation {
-        createEvent(title: "${eventData.title}", date: "${eventData.date}", location: "${eventData.location}") {
-          _id
+export const createEvent = async (eventData: { title: string; date: string; location: string; recipients: string[] }) => {
+  try {
+    const response = await api.post("", {
+      query: `
+        mutation CreateEvent($title: String!, $date: String!, $location: String!, $recipients: [String!]!) {
+          createEvent(title: $title, date: $date, location: $location, recipients: $recipients) {
+            _id
+          }
         }
-      }
-    `,
-  });
-};
+      `,
+      variables: {
+        title: eventData.title,
+        date: eventData.date,
+        location: eventData.location,
+        recipients: eventData.recipients,
+      },
+    });
 
-// RSVP to an event
-export const rsvpToEvent = async (eventId: string) => {
-  await api.post("", {
-    query: `
-      mutation {
-        rsvp(eventId: "${eventId}") {
-          _id
-        }
-      }
-    `,
-  });
+    console.log("Create Event Response:", response.data);
+
+    if (response.data.errors) {
+      console.error("GraphQL Create Event Error:", response.data.errors);
+      alert(response.data.errors[0].message);
+      return null;
+    }
+
+    return response.data.data.createEvent;
+  } catch (error) {
+    console.error("Create Event GraphQL Error:", error);
+    alert("Failed to create event.");
+    throw error;
+  }
 };
 
 // User login
@@ -146,3 +155,33 @@ export const registerUser = async (userData: { name: string; email: string; pass
     throw error;
   }
 };
+
+// RSVP to an event
+export const rsvpToEvent = async (eventId: string, name: string, response: "yes" | "no") => {
+  try {
+    const res = await api.post("", {
+      query: `
+        mutation {
+          rsvp(eventId: "${eventId}", name: "${name}", response: "${response}") {
+            _id
+          }
+        }
+      `,
+    });
+
+    console.log("RSVP Response:", res.data);
+
+    if (res.data.errors) {
+      console.error("GraphQL RSVP Error:", res.data.errors);
+      alert(res.data.errors[0].message);
+      return null;
+    }
+
+    return res.data.data.rsvp;
+  } catch (error) {
+    console.error("RSVP GraphQL Error:", error);
+    alert("Failed to RSVP.");
+    throw error;
+  }
+};
+

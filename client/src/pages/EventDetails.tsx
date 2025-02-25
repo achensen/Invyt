@@ -12,6 +12,8 @@ interface Event {
 const EventDetails = () => {
   const { id } = useParams<{ id: string }>();
   const [event, setEvent] = useState<Event | null>(null);
+  const [name, setName] = useState("");
+  const [response, setResponse] = useState<"yes" | "no">("yes");
 
   useEffect(() => {
     if (id) {
@@ -20,9 +22,11 @@ const EventDetails = () => {
   }, [id]);
 
   const handleRSVP = async () => {
-    if (id) {
-      await rsvpToEvent(id);
+    if (id && name.trim() !== "") {
+      await rsvpToEvent(id, name, response);
       alert("RSVP Confirmed!");
+    } else {
+      alert("Please enter your name before RSVPing.");
     }
   };
 
@@ -33,9 +37,24 @@ const EventDetails = () => {
       <h1>{event.title}</h1>
       <p>Date: {event.date}</p>
       <p>Location: {event.location}</p>
-      <button className="btn btn-success w-100" onClick={handleRSVP}>
-        RSVP Now
-      </button>
+      <div className="mt-3">
+        <label className="form-label">Enter your name:</label>
+        <input
+          className="form-control mb-2"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <label className="form-label">RSVP:</label>
+        <select className="form-select mb-2" value={response} onChange={(e) => setResponse(e.target.value as "yes" | "no")}>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+        <button className="btn btn-success w-100" onClick={handleRSVP}>
+          Submit RSVP
+        </button>
+      </div>
     </div>
   );
 };
