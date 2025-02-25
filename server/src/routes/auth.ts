@@ -33,7 +33,7 @@ passport.use(
         let user = await User.findOne({ googleId: profile.id });
 
         if (!user) {
-          // New User - Save to DB
+          // Create new user if not found
           user = await new User({
             googleId: profile.id,
             name: profile.displayName,
@@ -42,7 +42,7 @@ passport.use(
             refreshToken,
           }).save();
         } else {
-          // Existing User - Only Update Tokens If They Changed
+          // Update only if tokens changed
           if (user.accessToken !== accessToken || user.refreshToken !== refreshToken) {
             user.accessToken = accessToken;
             user.refreshToken = refreshToken;
@@ -64,6 +64,22 @@ passport.use(
     }
   )
 );
+
+// Serialize User (Store in Session)
+passport.serializeUser((user: any, done) => {
+  done(null, user._id); // Store only the user ID in the session
+});
+
+// Deserialize User (Retrieve from Session)
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (err) {
+    done(err, null);
+  }
+});
+
 
 // Function to Refresh Google Access Token
 const refreshGoogleToken = async (refreshToken: string) => {
@@ -114,7 +130,7 @@ router.get(
   }
 );
 
-// Protected Route - Refresh Google Access Token if Needed
+// Refresh Google Access Token
 router.get("/refresh-token", async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
