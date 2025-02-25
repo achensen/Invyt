@@ -1,18 +1,26 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import cors from "cors";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
-import typeDefs from "./schemas/typeDefs.js"; 
+import typeDefs from "./schemas/typeDefs.js";
 import resolvers from "./schemas/resolvers.js";
 import authMiddleware from "./utils/auth.js"; 
 
-dotenv.config();
 
 const app = express();
 
-app.use(cors());
+// CORS configuration to allow frontend requests
+app.use(
+  cors({
+    origin: "http://127.0.0.1:3000", // Allow frontend
+    credentials: true, // Allow authentication cookies
+  })
+);
+
 app.use(express.json());
 
 const MONGO_URI = process.env.MONGO_URI || "";
@@ -36,7 +44,7 @@ server.start().then(() => {
     "/graphql",
     expressMiddleware(server, {
       context: async ({ req }) => {
-        const user = await authMiddleware({ req });
+        const user = authMiddleware({ req }); // Extract user from token
         console.log("📌 User Context Middleware:", user);
         return { user };
       },
