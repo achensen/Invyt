@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Request } from "express";
 
-// Define the structure of decoded token
 interface DecodedUser {
   userId: string;
   name: string;
@@ -16,14 +15,22 @@ const authMiddleware = ({ req }: { req: Request }) => {
     return null;
   }
 
-  const token = authHeader.replace("Bearer ", ""); // Extract JWT token
+  const token = authHeader.replace("Bearer ", "");
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || "secret") as DecodedUser;
     console.log("✅ Token Decoded:", decoded);
-    return decoded; // Returns user object with userId, name, email
+    return decoded;
   } catch (error) {
-    console.error("❌ Invalid Token:", error);
+    if (error instanceof Error) {
+      if (error.name === "TokenExpiredError") {
+        console.error("❌ JWT Expired:", error.message);
+      } else {
+        console.error("❌ Invalid Token:", error.message);
+      }
+    } else {
+      console.error("❌ Unknown Error:", error);
+    }
     return null;
   }
 };

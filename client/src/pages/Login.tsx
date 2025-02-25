@@ -1,45 +1,31 @@
-import { useState, useContext } from "react";
-import { loginUser } from "../utils/api";
+import { useContext, useEffect } from "react";
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
-interface LoginForm {
-  email: string;
-  password: string;
-}
-
 const Login = () => {
-  const [form, setForm] = useState<LoginForm>({ email: "", password: "" });
   const userContext = useContext(UserContext);
   const navigate = useNavigate();
 
   if (!userContext) return null;
 
-  const { updateUser } = userContext;
+  const { user } = userContext;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    await loginUser(form, updateUser); // ✅ Pass `updateUser` as second argument
-    navigate("/");
-  };
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-4 text-center">
       <h1>Login</h1>
-      <form onSubmit={handleSubmit} className="p-4 shadow-lg rounded bg-light">
-        <div className="mb-3">
-          <label className="form-label">Email</label>
-          <input type="email" className="form-control" name="email" value={form.email} onChange={handleChange} required />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Password</label>
-          <input type="password" className="form-control" name="password" value={form.password} onChange={handleChange} required />
-        </div>
-        <button type="submit" className="btn btn-primary w-100">Login</button>
-      </form>
+      <p>You must log in with Google to access Invyt.</p>
+
+      {/* Google Sign-In Button */}
+      <a href="http://localhost:3001/auth/google" className="btn btn-danger">
+        Sign in with Google
+      </a>
     </div>
   );
 };

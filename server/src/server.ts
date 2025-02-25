@@ -8,8 +8,8 @@ import cors from "cors";
 import mongoose from "mongoose";
 import typeDefs from "./schemas/typeDefs.js";
 import resolvers from "./schemas/resolvers.js";
-import authMiddleware from "./utils/auth.js"; 
-
+import authMiddleware from "./utils/auth.js";
+import authRoutes from "./routes/auth.js";
 
 const app = express();
 
@@ -22,6 +22,8 @@ app.use(
 );
 
 app.use(express.json());
+
+app.use("/auth", authRoutes);
 
 const MONGO_URI = process.env.MONGO_URI || "";
 if (!MONGO_URI) {

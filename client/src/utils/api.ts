@@ -1,16 +1,15 @@
-import { setToken } from "./auth";
 import axios from "axios";
 import { getToken } from "./auth";
 
-// Create a base instance of Axios
+// Create a base Axios instance
 const api = axios.create({
-  baseURL: "http://localhost:3001/graphql", // Change this when deployed
+  baseURL: "http://localhost:3001/graphql",
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Add authorization token to every request if user is authenticated
+// Ensure Authorization Header is included if user is authenticated
 api.interceptors.request.use((config) => {
   const token = getToken();
   if (token) {
@@ -19,41 +18,63 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Fetch all events
+// Fetch all events (Only events created by the authenticated user)
 export const getEvents = async () => {
-  const response = await api.post("", {
-    query: `
-      query {
-        events {
-          _id
-          title
-          date
-          location
+  try {
+    const response = await api.post("", {
+      query: `
+        query {
+          events {
+            _id
+            title
+            date
+            location
+          }
         }
-      }
-    `,
-  });
-  return response.data.data.events;
+      `,
+    });
+
+    if (response.data.errors) {
+      console.error("GraphQL Event Fetch Error:", response.data.errors);
+      return [];
+    }
+
+    return response.data.data.events;
+  } catch (error) {
+    console.error("Event Fetch GraphQL Error:", error);
+    return [];
+  }
 };
 
 // Fetch a single event by ID
 export const getEventById = async (id: string) => {
-  const response = await api.post("", {
-    query: `
-      query {
-        event(id: "${id}") {
-          _id
-          title
-          date
-          location
+  try {
+    const response = await api.post("", {
+      query: `
+        query {
+          event(id: "${id}") {
+            _id
+            title
+            date
+            location
+          }
         }
-      }
-    `,
-  });
-  return response.data.data.event;
+      `,
+    });
+
+    if (response.data.errors) {
+      console.error("GraphQL Event Fetch Error:", response.data.errors);
+      return null;
+    }
+
+    return response.data.data.event;
+  } catch (error) {
+    console.error("Event Fetch GraphQL Error:", error);
+    return null;
+  }
 };
 
-// Create an event
+// Create an event (Authenticated User Only)
 export const createEvent = async (eventData: { title: string; date: string; location: string; recipients: string[] }) => {
   try {
     const response = await api.post("", {
@@ -72,8 +93,6 @@ export const createEvent = async (eventData: { title: string; date: string; loca
       },
     });
 
-    console.log("Create Event Response:", response.data);
-
     if (response.data.errors) {
       console.error("GraphQL Create Event Error:", response.data.errors);
       alert(response.data.errors[0].message);
@@ -84,75 +103,7 @@ export const createEvent = async (eventData: { title: string; date: string; loca
   } catch (error) {
     console.error("Create Event GraphQL Error:", error);
     alert("Failed to create event.");
-    throw error;
-  }
-};
-
-// User login
-export const loginUser = async (credentials: { email: string; password: string }, updateUser: (newUser: any) => void) => {
-  try {
-    const response = await api.post("", {
-      query: `
-        mutation {
-          login(email: "${credentials.email}", password: "${credentials.password}") {
-            token
-            user {
-              _id
-              name
-              email
-            }
-          }
-        }
-      `,
-    });
-
-    console.log("Login Response:", response.data);
-
-    const { token, user } = response.data.data.login;
-    setToken(token);
-    updateUser(user);
-    return user;
-  } catch (error) {
-    console.error("Login GraphQL Error:", error);
-    alert("Login failed. Please try again.");
-    throw error;
-  }
-};
-
-// User signup
-export const registerUser = async (userData: { name: string; email: string; password: string }, updateUser: (newUser: any) => void) => {
-  try {
-    const response = await api.post("", {
-      query: `
-        mutation {
-          register(name: "${userData.name}", email: "${userData.email}", password: "${userData.password}") {
-            token
-            user {
-              _id
-              name
-              email
-            }
-          }
-        }
-      `,
-    });
-
-    console.log("Signup Response:", response.data);
-
-    if (response.data.errors) {
-      console.error("GraphQL Signup Error:", response.data.errors);
-      alert(response.data.errors[0].message);
-      return null;
-    }
-
-    const { token, user } = response.data.data.register;
-    setToken(token);
-    updateUser(user);
-    return user;
-  } catch (error) {
-    console.error("Signup GraphQL Error:", error);
-    alert("Signup failed. Please try again.");
-    throw error;
+    return null;
   }
 };
 
@@ -161,15 +112,18 @@ export const rsvpToEvent = async (eventId: string, name: string, response: "yes"
   try {
     const res = await api.post("", {
       query: `
-        mutation {
-          rsvp(eventId: "${eventId}", name: "${name}", response: "${response}") {
+        mutation RSVP($eventId: ID!, $name: String!, $response: String!) {
+          rsvp(eventId: $eventId, name: $name, response: $response) {
             _id
           }
         }
       `,
+      variables: {
+        eventId,
+        name,
+        response,
+      },
     });
-
-    console.log("RSVP Response:", res.data);
 
     if (res.data.errors) {
       console.error("GraphQL RSVP Error:", res.data.errors);
@@ -181,7 +135,6 @@ export const rsvpToEvent = async (eventId: string, name: string, response: "yes"
   } catch (error) {
     console.error("RSVP GraphQL Error:", error);
     alert("Failed to RSVP.");
-    throw error;
+    return null;
   }
 };
-

@@ -1,39 +1,39 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../context/UserContext";
 import { getEvents } from "../utils/api";
 
-interface Event {
-  _id: string;
-  title: string;
-  date: string;
-  location: string;
-}
-
 const Home = () => {
-  const [events, setEvents] = useState<Event[]>([]);
+  const userContext = useContext(UserContext);
+  const [events, setEvents] = useState<any[]>([]);
+
+  if (!userContext) return null;
+
+  const { user } = userContext;
 
   useEffect(() => {
-    getEvents().then((data) => setEvents(data));
-  }, []);
+    if (user) {
+      getEvents()
+        .then((data) => setEvents(data))
+        .catch((error) => console.error("Error fetching events:", error));
+    }
+  }, [user]);
+
+  if (!user) {
+    return <h2>Please log in to see events.</h2>;
+  }
 
   return (
     <div className="container mt-4">
-      <h1 className="text-center">Upcoming Events</h1>
-      <div className="row">
-        {events.map((event) => (
-          <div className="col-md-4 col-sm-6 mb-4" key={event._id}>
-            <div className="card shadow-sm">
-              <div className="card-body">
-                <h5 className="card-title">{event.title}</h5>
-                <p className="card-text">{event.date}</p>
-                <Link to={`/event/${event._id}`} className="btn btn-primary w-100">
-                  View Details
-                </Link>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <h1>Upcoming Events</h1>
+      {events.length === 0 ? (
+        <p>No events available.</p>
+      ) : (
+        <ul>
+          {events.map((event) => (
+            <li key={event._id}>{event.title} - {event.date}</li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
