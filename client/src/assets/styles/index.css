@@ -275,3 +275,25 @@ a:hover {
     padding: 1rem;
   }
 }
+
+/* Ensure Full Name Shows on Desktop, Initials on Mobile */
+.desktop-name {
+  display: inline-block;
+}
+
+.mobile-initials {
+  display: none;
+}
+
+/* Hide Full Name, Show Initials on Mobile */
+@media (max-width: 768px) {
+  .desktop-name {
+    display: none;
+  }
+
+  .mobile-initials {
+    display: inline-block;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+}
