@@ -276,6 +276,50 @@ button:hover {
   margin-bottom: 10px;
 }
 
+.event-details-container {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Event Copy Link */
+.copy-link-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.copy-link-input {
+  flex: 1;
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid var(--primary-color);
+  border-radius: var(--border-radius);
+  background: white;
+  color: black;
+}
+
+.copy-btn {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+}
+
+.copy-btn:hover {
+  background-color: var(--button-hover);
+  color: black;
+}
+
+
 /* Footer */
 .footer {
   width: 100%;
@@ -342,5 +386,57 @@ a:hover {
     min-width: 100px;
     padding: 5px 10px;
     transform: translateX(25px);
+  }
+}
+
+/* Ensure Shareable Link Label is Above Input on Mobile */
+@media (max-width: 768px) {
+  .copy-link-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .copy-link-container label {
+    margin-bottom: 5px;
+  }
+
+  .copy-link-input {
+    width: 100%;
+  }
+
+  .copy-btn {
+    width: 100%;
+    text-align: center;
+    margin-top: 5px;
+  }
+}
+
+/* Ensure RSVP Section Elements are Not Full-Width on Desktop */
+@media (min-width: 769px) {
+  .rsvp-container {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .rsvp-container input,
+  .rsvp-container select,
+  .rsvp-container button {
+    width: 100%;
+  }
+}
+
+/* Ensure Event Details & Copyable Link Do Not Take Up Full Width on Desktop */
+@media (min-width: 769px) {
+  .copy-link-container {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
+
+/* Ensure Consistency Across Screen Sizes */
+@media (max-width: 768px) {
+  .event-details-container {
+    width: 100%;
+    padding: 0 1rem;
   }
 }
