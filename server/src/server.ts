@@ -18,7 +18,7 @@ const app = express();
 // CORS Configuration
 app.use(
   cors({
-    origin: "http://127.0.0.1:3000",
+    origin: ["http://127.0.0.1:3000", "http://localhost:3000"],
     credentials: true,
   })
 );
@@ -35,7 +35,7 @@ app.use(
   })
 );
 
-// Initialize Passport (Fix TypeScript Issue)
+// Initialize Passport
 app.use(passport.initialize() as express.RequestHandler);
 app.use(passport.session() as express.RequestHandler);
 
