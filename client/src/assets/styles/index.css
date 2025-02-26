@@ -1,4 +1,3 @@
-/* 🌟 Fun & Vibrant Color Palette */
 :root {
   --primary-color: #6b81ff;
   --secondary-color: #1dd1a1;
@@ -23,7 +22,7 @@ html, body {
   width: 100vw;
 }
 
-/* 🌍 Full Page Layout */
+/* Full Page Layout */
 .app-container {
   display: flex;
   flex-direction: column;
@@ -39,7 +38,7 @@ html, body {
   margin: 0 auto;
 }
 
-/* 🎨 Navbar */
+/* Navbar */
 .navbar {
   width: 100%;
   background-color: var(--navbar-bg) !important;
@@ -66,7 +65,7 @@ html, body {
   color: var(--navbar-hover);
 }
 
-/* 📜 Dropdown Improvements */
+/* Dropdown Improvements */
 .dropdown-menu {
   background-color: var(--primary-color);
   border-radius: var(--border-radius);
@@ -81,7 +80,7 @@ html, body {
 
 .logoutText {
   color: #a80000;
-  font-weight: bold; 
+  font-weight: bold;
 }
 
 /* Change color on hover */
@@ -94,7 +93,7 @@ html, body {
   color: #0000009f;
 }
 
-/* 🏆 Buttons */
+/* Buttons */
 button {
   background-color: var(--secondary-color);
   color: var(--text-color);
@@ -111,7 +110,7 @@ button:hover {
   background-color: var(--button-hover);
 }
 
-/* 📅 Event Page Styling */
+/* Event Page Styling */
 .event-container, .profile-container {
   max-width: 600px;
   margin: auto;
@@ -123,7 +122,7 @@ button:hover {
   color: var(--text-color);
 }
 
-/* 📝 Input Groups */
+/* Input Groups */
 .input-group {
   display: flex;
   flex-direction: column;
@@ -149,7 +148,7 @@ button:hover {
   outline: none;
 }
 
-/* 📧 Email Input */
+/* Email Input */
 .email-input {
   display: flex;
   gap: 10px;
@@ -170,7 +169,7 @@ button:hover {
   font-weight: bold;
 }
 
-/* 🎨 Buttons */
+/* Buttons */
 .btn-primary {
   background-color: var(--primary-color);
   color: white;
@@ -200,7 +199,7 @@ button:hover {
 }
 
 .btn-danger {
-  background-color: #f00000 !important; 
+  background-color: #f00000 !important;
   color: white;
   padding: 12px;
   font-size: 1rem;
@@ -211,12 +210,11 @@ button:hover {
 
 /* Change color on hover */
 .btn-danger:hover {
-  background-color: #d10000 !important; 
+  background-color: #d10000 !important;
   color: black !important;
 }
 
-
-/* 🔥 Profile Styling */
+/* Profile Styling */
 .profile-card {
   text-align: center;
   padding: 2rem;
@@ -240,7 +238,7 @@ button:hover {
   margin-bottom: 10px;
 }
 
-/* 🔹 Style the Dropdown Toggle Button */
+/* Style the Dropdown Toggle Button */
 .dropdown-toggle {
   background-color: var(--primary-color) !important;
   color: var(--text-color) !important;
@@ -251,15 +249,14 @@ button:hover {
   transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
-/* 🔹 Change Color When Hovering */
+/* Change Color When Hovering */
 .dropdown-toggle:hover,
 .dropdown-toggle:focus {
   background-color: var(--button-hover) !important;
   color: black !important;
 }
 
-
-/* 📌 Fix Footer at Bottom */
+/* Fix Footer at Bottom */
 .footer {
   width: 100%;
   text-align: center;
@@ -270,7 +267,7 @@ button:hover {
   position: relative;
 }
 
-/* ✨ Links */
+/* Links */
 a {
   color: var(--accent-color);
   font-weight: 500;
@@ -281,7 +278,7 @@ a:hover {
   color: var(--button-hover);
 }
 
-/* 📏 Ensure Full Width & Responsiveness */
+/* Ensure Full Width & Responsiveness */
 @media (max-width: 768px) {
   .content {
     padding: 1rem;

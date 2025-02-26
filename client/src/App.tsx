@@ -3,7 +3,6 @@ import Home from "./pages/Home";
 import EventDetails from "./pages/EventDetails";
 import CreateEvent from "./pages/CreateEvent";
 import Login from "./pages/Login";
-import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
@@ -26,7 +25,6 @@ function App() {
           {/* Redirect Logged-in Users Away */}
           <Route element={<RedirectIfLoggedIn />}>
             <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
           </Route>
         </Routes>
       </main>

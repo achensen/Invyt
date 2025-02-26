@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const Navigation = () => {
   const userContext = useContext(UserContext);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLLIElement>(null); // ✅ FIXED TYPE
+  const dropdownRef = useRef<HTMLLIElement>(null);
 
   if (!userContext) return null;
 
@@ -24,7 +24,7 @@ const Navigation = () => {
   }, []);
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg custom-navbar">
       <div className="container">
         <Link className="navbar-brand" to="/">Invyt</Link>
         <div className="collapse navbar-collapse">
@@ -36,7 +36,7 @@ const Navigation = () => {
                 </li>
                 <li className="nav-item dropdown" ref={dropdownRef}>
                   <button 
-                    className="btn btn-outline-secondary dropdown-toggle" 
+                    className="btn dropdown-toggle profile-dropdown" 
                     onClick={() => setDropdownOpen(!dropdownOpen)}
                   >
                     {user.name}
@@ -53,7 +53,7 @@ const Navigation = () => {
               </>
             ) : (
               <li className="nav-item">
-                <a href="http://localhost:3001/auth/google" className="nav-link">Login</a>
+                <a href="http://localhost:3001/auth/google" className="btn btn-login">Login</a>
               </li>
             )}
           </ul>
