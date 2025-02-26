@@ -89,6 +89,8 @@ html, body {
 .dropdown-item {
   color: #ffffff;
   font-weight: bold;
+  font-size: 0.85rem; /* Slightly reduce text size */
+  padding: 6px 10px; /* Adjust padding */
 }
 
 .logoutText {
@@ -330,5 +332,15 @@ a:hover {
   .navbar-nav {
     display: flex;
     align-items: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .dropdown-menu {
+    right: 0;
+    left: auto;
+    min-width: 100px;
+    padding: 5px 10px;
+    transform: translateX(25px);
   }
 }
