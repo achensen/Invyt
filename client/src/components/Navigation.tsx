@@ -27,7 +27,10 @@ const Navigation = () => {
     <nav className="navbar navbar-expand-lg custom-navbar">
       <div className="container">
         <Link className="navbar-brand" to="/">Invyt</Link>
-        <div className="collapse navbar-collapse">
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
             {user ? (
               <>
@@ -53,7 +56,7 @@ const Navigation = () => {
               </>
             ) : (
               <li className="nav-item">
-                <a href="http://localhost:3001/auth/google" className="btn btn-login">Login</a>
+                <a href="http://localhost:3001/auth/google" className="btn loginButton">Login</a>
               </li>
             )}
           </ul>

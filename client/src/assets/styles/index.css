@@ -1,3 +1,4 @@
+/* Global Variables */
 :root {
   --primary-color: #6b81ff;
   --secondary-color: #1dd1a1;
@@ -10,6 +11,7 @@
   --border-radius: 10px;
 }
 
+/* Global Styles */
 html, body {
   height: 100%;
   margin: 0;
@@ -65,7 +67,7 @@ html, body {
   color: var(--navbar-hover);
 }
 
-/* Dropdown Improvements */
+/* Dropdown */
 .dropdown-menu {
   background-color: var(--primary-color);
   border-radius: var(--border-radius);
@@ -90,39 +92,80 @@ html, body {
 }
 
 .logoutText:hover {
-  color: #0000009f;
+  color: black;
 }
 
 /* Buttons */
-button {
-  background-color: var(--secondary-color);
-  color: var(--text-color);
-  border: none;
+button, .btn-primary, .btn-secondary, .btn-danger, .loginButton {
   padding: 10px 16px;
   font-size: 1rem;
   font-weight: bold;
   border-radius: var(--border-radius);
   transition: background 0.3s ease-in-out;
   cursor: pointer;
+  border: none;
+}
+
+button {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
 }
 
 button:hover {
   background-color: var(--button-hover);
 }
 
-/* Event Page Styling */
-.event-container, .profile-container {
-  max-width: 600px;
-  margin: auto;
-  background: #444;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  color: var(--text-color);
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
 }
 
-/* Input Groups */
+.btn-primary:hover {
+  background-color: #4863ff;
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #10ac84;
+}
+
+.btn-danger {
+  background-color: #f00000 !important;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #d10000 !important;
+  color: black !important;
+}
+
+.loginButton {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.loginButton:hover {
+  background-color: #4863ff;
+}
+
+/* Dropdown Toggle Button */
+.dropdown-toggle {
+  background-color: var(--primary-color) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--primary-color) !important;
+}
+
+.dropdown-toggle:hover,
+.dropdown-toggle:focus {
+  background-color: var(--button-hover) !important;
+  color: black !important;
+}
+
+/* Forms */
 .input-group {
   display: flex;
   flex-direction: column;
@@ -169,52 +212,18 @@ button:hover {
   font-weight: bold;
 }
 
-/* Buttons */
-.btn-primary {
-  background-color: var(--primary-color);
-  color: white;
-  padding: 12px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+/* Event Page & Profile */
+.event-container, .profile-container {
+  max-width: 600px;
+  margin: auto;
+  background: #444;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  color: var(--text-color);
 }
 
-.btn-primary:hover {
-  background-color: #4863ff;
-}
-
-.btn-secondary {
-  background-color: var(--secondary-color);
-  color: white;
-  padding: 10px;
-  font-size: 0.9rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.btn-secondary:hover {
-  background-color: #10ac84;
-}
-
-.btn-danger {
-  background-color: #f00000 !important;
-  color: white;
-  padding: 12px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-/* Change color on hover */
-.btn-danger:hover {
-  background-color: #d10000 !important;
-  color: black !important;
-}
-
-/* Profile Styling */
 .profile-card {
   text-align: center;
   padding: 2rem;
@@ -238,25 +247,7 @@ button:hover {
   margin-bottom: 10px;
 }
 
-/* Style the Dropdown Toggle Button */
-.dropdown-toggle {
-  background-color: var(--primary-color) !important;
-  color: var(--text-color) !important;
-  border: 1px solid var(--primary-color) !important;
-  padding: 10px 16px;
-  font-weight: bold;
-  border-radius: var(--border-radius);
-  transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
-}
-
-/* Change Color When Hovering */
-.dropdown-toggle:hover,
-.dropdown-toggle:focus {
-  background-color: var(--button-hover) !important;
-  color: black !important;
-}
-
-/* Fix Footer at Bottom */
+/* Footer */
 .footer {
   width: 100%;
   text-align: center;
