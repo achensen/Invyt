@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/UserContext";
 import { getEvents } from "../utils/api";
+import Places from "../components/Places";
 
 const Home = () => {
   const userContext = useContext(UserContext);
@@ -22,9 +23,13 @@ const Home = () => {
   if (!user) {
     return <h2 className="text-center mt-4">Please log in to see events.</h2>;
   }
+  // if (!user) {
+  //   return <Places/>;
+  // }
 
   return (
     <div className="container mt-4">
+      
       <h1>Upcoming Events</h1>
       {events.length === 0 ? (
         <p>No events available.</p>
