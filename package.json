@@ -6,6 +6,7 @@
   "scripts": {
     "start": "npm run client:build && npm run server",
     "start:dev": "concurrently \"npm run server:dev\" \"wait-on tcp:3001 && npm run client:dev\"",
+    "start:all": "concurrently \"npm run server\" \"wait-on tcp:3001 && npm run client:build\"",
     "server": "cd server && npm start",
     "server:dev": "cd server && npm run dev",
     "server:build": "cd server && npm run build",

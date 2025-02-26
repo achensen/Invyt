@@ -1,69 +1,289 @@
+/* 🌟 Fun & Vibrant Color Palette */
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+  --primary-color: #6b81ff;
+  --secondary-color: #1dd1a1;
+  --accent-color: #b2b0fd63;
+  --text-color: #ffffff;
+  --background-color: #222f3e;
+  --navbar-bg: #341f97;
+  --navbar-hover: #000000;
+  --button-hover: #4863ff;
+  --border-radius: 10px;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
+html, body {
+  height: 100%;
   margin: 0;
+  padding: 0;
+  font-family: "Inter", sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
   display: flex;
-  place-items: center;
-  min-width: 320px;
+  flex-direction: column;
+  width: 100vw;
+}
+
+/* 🌍 Full Page Layout */
+.app-container {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
+  width: 100vw;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.content {
+  flex: 1;
+  width: 100%;
+  max-width: 1400px;
+  padding: 2rem;
+  margin: 0 auto;
 }
 
+/* 🎨 Navbar */
+.navbar {
+  width: 100%;
+  background-color: var(--navbar-bg) !important;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-color);
+}
+
+.navbar-brand {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.navbar-nav .nav-item .nav-link {
+  color: var(--text-color);
+  font-weight: bold;
+  transition: color 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+  color: var(--navbar-hover);
+}
+
+/* 📜 Dropdown Improvements */
+.dropdown-menu {
+  background-color: var(--primary-color);
+  border-radius: var(--border-radius);
+  color: var(--text-color);
+  border: 1px solid var(--secondary-color);
+}
+
+.dropdown-item {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.logoutText {
+  color: #a80000;
+  font-weight: bold; 
+}
+
+/* Change color on hover */
+.dropdown-item:hover {
+  background-color: var(--button-hover);
+  color: black;
+}
+
+.logoutText:hover {
+  color: #0000009f;
+}
+
+/* 🏆 Buttons */
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  border: none;
+  padding: 10px 16px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: var(--border-radius);
+  transition: background 0.3s ease-in-out;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+button:hover {
+  background-color: var(--button-hover);
+}
+
+/* 📅 Event Page Styling */
+.event-container, .profile-container {
+  max-width: 600px;
+  margin: auto;
+  background: #444;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  color: var(--text-color);
+}
+
+/* 📝 Input Groups */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.input-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.input-group input {
+  padding: 10px;
+  border-radius: 6px;
+  border: 2px solid var(--accent-color);
+  font-size: 1rem;
+  background: white;
+  color: black;
+}
+
+.input-group input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+/* 📧 Email Input */
+.email-input {
+  display: flex;
+  gap: 10px;
+}
+
+.recipient-list {
+  list-style-type: none;
+  padding: 0;
+  text-align: left;
+}
+
+.recipient-list li {
+  background: var(--button-hover);
+  padding: 5px 10px;
+  border-radius: 6px;
+  margin-top: 5px;
+  color: white;
+  font-weight: bold;
+}
+
+/* 🎨 Buttons */
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #4863ff;
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 10px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: #10ac84;
+}
+
+.btn-danger {
+  background-color: #f00000 !important; 
+  color: white;
+  padding: 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Change color on hover */
+.btn-danger:hover {
+  background-color: #d10000 !important; 
+  color: black !important;
+}
+
+
+/* 🔥 Profile Styling */
+.profile-card {
+  text-align: center;
+  padding: 2rem;
+  background: var(--accent-color);
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  background: var(--primary-color);
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin: auto;
+  margin-bottom: 10px;
+}
+
+/* 🔹 Style the Dropdown Toggle Button */
+.dropdown-toggle {
+  background-color: var(--primary-color) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--primary-color) !important;
+  padding: 10px 16px;
+  font-weight: bold;
+  border-radius: var(--border-radius);
+  transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+/* 🔹 Change Color When Hovering */
+.dropdown-toggle:hover,
+.dropdown-toggle:focus {
+  background-color: var(--button-hover) !important;
+  color: black !important;
+}
+
+
+/* 📌 Fix Footer at Bottom */
+.footer {
+  width: 100%;
+  text-align: center;
+  padding: 1rem;
+  background-color: var(--navbar-bg);
+  color: white;
+  margin-top: auto;
+  position: relative;
+}
+
+/* ✨ Links */
+a {
+  color: var(--accent-color);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--button-hover);
+}
+
+/* 📏 Ensure Full Width & Responsiveness */
+@media (max-width: 768px) {
+  .content {
+    padding: 1rem;
   }
 }

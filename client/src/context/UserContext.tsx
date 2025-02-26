@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
-import { getToken, setToken, removeToken } from "../utils/auth";
+import { getToken, removeToken, setToken } from "../utils/auth";
 import { useNavigate } from "react-router-dom";
 
 interface UserContextType {
@@ -15,20 +15,22 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check for token in URL after Google OAuth login
+    // Check if a token is in the URL (after Google login)
     const urlParams = new URLSearchParams(window.location.search);
-    const tokenFromUrl = urlParams.get("token");
+    const token = urlParams.get("token");
 
-    if (tokenFromUrl) {
-      setToken(tokenFromUrl); // Store in localStorage
-      window.history.replaceState({}, document.title, "/"); // Remove token from URL
-    }
-
-    // Get token from localStorage
-    const token = getToken();
     if (token) {
+      setToken(token);
       const payload = JSON.parse(atob(token.split(".")[1]));
       setUser({ _id: payload.userId, name: payload.name, email: payload.email });
+      navigate("/");
+    } else {
+      // Load user from local storage
+      const savedToken = getToken();
+      if (savedToken) {
+        const payload = JSON.parse(atob(savedToken.split(".")[1]));
+        setUser({ _id: payload.userId, name: payload.name, email: payload.email });
+      }
     }
   }, []);
 

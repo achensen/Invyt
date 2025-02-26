@@ -4,6 +4,7 @@ import EventDetails from "./pages/EventDetails";
 import CreateEvent from "./pages/CreateEvent";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Profile from "./pages/Profile";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./utils/ProtectedRoute";
@@ -11,12 +12,13 @@ import RedirectIfLoggedIn from "./utils/RedirectIfLoggedIn";
 
 function App() {
   return (
-    <>
+    <div className="app-container">
       <Navigation />
-      <main className="container mt-4">
+      <main className="content">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/event/:id" element={<EventDetails />} />
+          <Route path="/profile" element={<Profile />} />
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="/create-event" element={<CreateEvent />} />
@@ -29,7 +31,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
 

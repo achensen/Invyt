@@ -1,31 +1,42 @@
-import { useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import { UserContext } from "../context/UserContext";
-import { useNavigate } from "react-router-dom";
+import { loginUser } from "../utils/api";
 
 const Login = () => {
+  const [loading, setLoading] = useState(false);
   const userContext = useContext(UserContext);
-  const navigate = useNavigate();
 
   if (!userContext) return null;
-
   const { user } = userContext;
 
-  // Redirect if already logged in
-  useEffect(() => {
-    if (user) {
-      navigate("/");
+  if (user) {
+    return <p>You are already logged in.</p>;
+  }
+
+  const handleLogin = async () => {
+    try {
+      setLoading(true);
+      await loginUser();
+    } catch (error) {
+      console.error("Login failed:", error);
+      alert("Failed to log in. Please try again.");
+    } finally {
+      setLoading(false);
     }
-  }, [user, navigate]);
+  };
 
   return (
-    <div className="container mt-4 text-center">
-      <h1>Login</h1>
-      <p>You must log in with Google to access Invyt.</p>
+    <div className="container mt-5 text-center">
+      <h1>Login to Invyt</h1>
+      <p className="lead">Sign in with your Google account to continue.</p>
 
-      {/* Google Sign-In Button */}
-      <a href="http://localhost:3001/auth/google" className="btn btn-danger">
-        Sign in with Google
-      </a>
+      <button
+        className="btn btn-danger btn-lg mt-3"
+        onClick={handleLogin}
+        disabled={loading}
+      >
+        {loading ? "Logging in..." : "Sign in with Google"}
+      </button>
     </div>
   );
 };
