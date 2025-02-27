@@ -108,18 +108,16 @@ const refreshGoogleToken = async (refreshToken: string) => {
   }
 };
 
-// FIXED: Google Login Route (was missing)
-// FIXED: Google Login Route (Ensures Refresh Token)
+// FIXED: Google Login Route
 router.get(
   "/google",
   passport.authenticate("google", {
-    scope: ["profile", "email"], // 
+    scope: ["profile", "email", "https://mail.google.com/"], // 
     accessType: "offline", // Forces refreshToken
     prompt: "consent", // Forces Google to resend refreshToken
   })
 );
 
-// Google Callback Route
 // Google Callback Route
 router.get(
   "/google/callback",
