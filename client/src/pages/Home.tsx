@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
+import Events from "../components/Events";
 // import Places from "../components/Places";
 
 const Home = () => {
@@ -22,9 +23,11 @@ const Home = () => {
     <div className="container mt-4">
       <h1>Welcome to Invyt</h1>
       <p className="text-center">Create, share, and manage your events seamlessly.</p>
+
+      {/* Display local events */}
+      <Events />
     </div>
   );
-
 };
 
 export default Home;

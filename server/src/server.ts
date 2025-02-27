@@ -15,9 +15,15 @@ import typeDefs from "./schemas/typeDefs.js";
 import resolvers from "./schemas/resolvers.js";
 import authMiddleware from "./utils/auth.js";
 import { fileURLToPath } from 'node:url';
+import ticketmasterRoutes from "./routes/ticketmaster.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
+
+// Ticketmaster API Routes
+app.use("/api/ticketmaster", ticketmasterRoutes);
+
+console.log("🔑 Ticketmaster API Key:", process.env.TICKETMASTER_API_KEY);
 
 // CORS Configuration
 app.use(
