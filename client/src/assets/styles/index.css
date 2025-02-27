@@ -285,6 +285,19 @@ button:hover {
   align-items: center;
 }
 
+/* Increase Event Details Text Size for Better Readability */
+.event-details-container h1 {
+  font-size: 3.3rem; /* Larger title */
+  font-weight: bold;
+  margin-bottom: 0.6rem;
+}
+
+.event-details-container p {
+  font-size: 1.2rem; /* Increase text size for date and location */
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
 /* Event Copy Link */
 .copy-link-container {
   display: flex;

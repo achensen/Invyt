@@ -3,10 +3,10 @@ dotenv.config();
 
 import express from "express";
 import passport from "passport";
-import { Strategy as GoogleStrategy, Profile } from "passport-google-oauth20";
+import { Strategy as GoogleStrategy, Profile, VerifyCallback, GoogleCallbackParameters } from "passport-google-oauth20";
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
 import axios from "axios";
+import User from "../models/User.js";
 
 const router = express.Router();
 
@@ -27,37 +27,39 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       callbackURL: process.env.GOOGLE_REDIRECT_URI!,
+      scope: ["profile", "email", "https://mail.google.com/"], // Request mail access
+      passReqToCallback: true,
     },
-    async (accessToken: string, refreshToken: string, profile: Profile, done) => {
+    async function (
+      _req: express.Request,
+      accessToken: string,
+      refreshToken: string,
+      _params: GoogleCallbackParameters,
+      profile: Profile,
+      done: VerifyCallback
+    ) {
       try {
         let user = await User.findOne({ googleId: profile.id });
 
         if (!user) {
-          // Create new user if not found
-          user = await new User({
+          user = new User({
             googleId: profile.id,
             name: profile.displayName,
             email: profile.emails ? profile.emails[0].value : "",
             accessToken,
             refreshToken,
-          }).save();
+          });
         } else {
-          // Update only if tokens changed
-          if (user.accessToken !== accessToken || user.refreshToken !== refreshToken) {
-            user.accessToken = accessToken;
+          user.accessToken = accessToken;
+
+          // Ensure the refresh token is always stored if provided
+          if (refreshToken && refreshToken !== user.refreshToken) {
             user.refreshToken = refreshToken;
-            await user.save();
           }
         }
 
-        return done(null, {
-          _id: user._id.toString(),
-          googleId: user.googleId,
-          name: user.name,
-          email: user.email,
-          accessToken: user.accessToken ?? "",
-          refreshToken: user.refreshToken ?? "",
-        });
+        await user.save(); // Save user after changes
+        return done(null, user);
       } catch (err) {
         return done(err as Error, undefined);
       }
@@ -65,12 +67,20 @@ passport.use(
   )
 );
 
-// Serialize User (Store in Session)
-passport.serializeUser((user: any, done) => {
-  done(null, user._id); // Store only the user ID in the session
+// Add authorization parameters to request offline access
+passport.authorize("google", {
+  accessType: "offline",
+  prompt: "consent",
 });
 
-// Deserialize User (Retrieve from Session)
+
+
+// Serialize User (Session Storage)
+passport.serializeUser((user: any, done) => {
+  done(null, user._id);
+});
+
+// Deserialize User (Retrieve from DB)
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await User.findById(id);
@@ -79,7 +89,6 @@ passport.deserializeUser(async (id, done) => {
     done(err, null);
   }
 });
-
 
 // Function to Refresh Google Access Token
 const refreshGoogleToken = async (refreshToken: string) => {
@@ -93,44 +102,74 @@ const refreshGoogleToken = async (refreshToken: string) => {
 
     return response.data.access_token;
   } catch (error) {
-    console.error("Failed to refresh Google token:", error);
+    const err = error as any;
+    console.error("Failed to refresh Google token:", err.response?.data || err.message);
     return null;
   }
 };
 
-// Google Login Route
+// FIXED: Google Login Route (was missing)
+// FIXED: Google Login Route (Ensures Refresh Token)
 router.get(
   "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
+  passport.authenticate("google", {
+    scope: ["profile", "email"], // 
+    accessType: "offline", // Forces refreshToken
+    prompt: "consent", // Forces Google to resend refreshToken
+  })
 );
 
-// Google Callback Route (After Successful Login)
+// Google Callback Route
+// Google Callback Route
 router.get(
   "/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
   async (req, res) => {
-    if (!req.user) {
-      console.error("No user found after authentication");
-      return res.redirect("/login");
+    try {
+      if (!req.user) {
+        console.error("No user found after authentication");
+        return res.redirect("/login");
+      }
+
+      const user = req.user as IUser;
+
+      // Ensure refreshToken is stored
+      if (!user.refreshToken) {
+        console.log("Storing new refresh token...");
+        const updatedUser = await User.findByIdAndUpdate(
+          user._id,
+          { refreshToken: user.refreshToken },
+          { new: true }
+        );
+
+        console.log("✅ Refresh token stored:", updatedUser?.refreshToken);
+      }
+
+      // Generate JWT Token including Access Token
+      const token = jwt.sign(
+        { 
+          userId: user._id, 
+          name: user.name, 
+          email: user.email,
+          accessToken: user.accessToken, // Include Access Token
+        },
+        process.env.JWT_SECRET!,
+        { expiresIn: "24h" }
+      );
+
+      console.log("Google Login Successful - Redirecting with Token");
+
+      // Redirect back to frontend with token
+      res.redirect(`http://localhost:3000?token=${token}`);
+    } catch (error) {
+      console.error("Error during Google callback:", error);
+      res.status(500).json({ message: "Internal Server Error" });
     }
-
-    const user = req.user as IUser;
-
-    // Generate JWT Token
-    const token = jwt.sign(
-      { userId: user._id, name: user.name, email: user.email },
-      process.env.JWT_SECRET!,
-      { expiresIn: "24h" }
-    );
-
-    console.log("Google Login Successful - Redirecting with Token");
-
-    // Redirect back to frontend with token
-    res.redirect(`http://localhost:3000?token=${token}`);
   }
 );
 
-// Refresh Google Access Token
+
+// Refresh Google Access Token Route
 router.get("/refresh-token", async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
@@ -148,7 +187,7 @@ router.get("/refresh-token", async (req, res) => {
     }
 
     const newAccessToken = await refreshGoogleToken(user.refreshToken);
-    
+
     if (!newAccessToken) {
       return res.status(500).json({ message: "Failed to refresh Google Token" });
     }
@@ -158,9 +197,11 @@ router.get("/refresh-token", async (req, res) => {
 
     return res.json({ accessToken: newAccessToken });
   } catch (error) {
-    console.error("Error refreshing token:", error);
+    const err = error as any;
+    console.error("Error refreshing token:", err.message || err);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
+export { refreshGoogleToken };
 export default router;

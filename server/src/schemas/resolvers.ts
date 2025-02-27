@@ -1,13 +1,39 @@
 import User from "../models/User.js";
 import Event from "../models/Event.js";
 import nodemailer from "nodemailer";
+import { refreshGoogleToken } from "../routes/auth.js"; // Import refresh function
 
 // Function to create OAuth2 transporter
 const createTransporter = async (email: string) => {
   const user = await User.findOne({ email });
 
-  if (!user || !user.accessToken || !user.refreshToken) {
-    throw new Error("User has not authenticated with Google.");
+  if (!user) {
+    throw new Error("User not found in database.");
+  }
+
+  if (!user.refreshToken) {
+    throw new Error(`User ${email} is missing a refresh token.`);
+  }
+
+  // Log current tokens
+  console.log(`🔄 Attempting email send for: ${email}`);
+  console.log(`🔑 Stored Access Token: ${user.accessToken}`);
+  console.log(`🔄 Stored Refresh Token: ${user.refreshToken}`);
+
+  // Refresh access token if missing or expired
+  let accessToken = user.accessToken;
+  if (!accessToken) {
+    console.log(`🚨 Access Token missing for ${email}, attempting refresh.`);
+    accessToken = await refreshGoogleToken(user.refreshToken);
+    
+    if (!accessToken) {
+      throw new Error(`Failed to refresh Google Access Token for ${email}.`);
+    }
+
+    // Save the refreshed token
+    user.accessToken = accessToken;
+    await user.save();
+    console.log(`✅ Refreshed Access Token saved for ${email}`);
   }
 
   return nodemailer.createTransport({
@@ -18,10 +44,11 @@ const createTransporter = async (email: string) => {
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       refreshToken: user.refreshToken,
-      accessToken: user.accessToken,
+      accessToken: accessToken, // Use refreshed access token
     },
   });
 };
+
 
 const resolvers = {
   Query: {
@@ -77,7 +104,8 @@ const resolvers = {
         await transporter.sendMail(mailOptions);
         console.log(`📧 Invitation emails sent from ${context.user.email}`);
       } catch (error) {
-        console.error("❌ Email sending failed:", error);
+        const err = error as any;
+        console.error("❌ Email sending failed:", err.message || err);
       }
 
       return event;
