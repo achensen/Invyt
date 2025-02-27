@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import type { Request, Response } from 'express';
+import path from 'node:path';
 import express from "express";
 import session from "express-session";
 import passport from "passport";
@@ -12,6 +14,9 @@ import authRoutes from "./routes/auth.js";
 import typeDefs from "./schemas/typeDefs.js";
 import resolvers from "./schemas/resolvers.js";
 import authMiddleware from "./utils/auth.js";
+import { fileURLToPath } from 'node:url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -24,6 +29,14 @@ app.use(
 );
 
 app.use(express.json());
+if (process.env.NODE_ENV === 'production') {
+  console.log ('running in production')
+  app.use(express.static(path.join(__dirname, '../../client/dist')));
+
+  app.get('*', (_req: Request, res: Response) => {
+    res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
+  });
+}
 
 // Configure Sessions (Required for Passport)
 app.use(
