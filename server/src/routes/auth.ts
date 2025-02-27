@@ -27,7 +27,12 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       callbackURL: process.env.GOOGLE_REDIRECT_URI!,
-      scope: ["profile", "email", "https://mail.google.com/"], // Request mail access
+      scope: [
+        "profile",
+        "email",
+        "https://www.googleapis.com/auth/userinfo.email",
+        "https://www.googleapis.com/auth/gmail.send"
+      ],
       passReqToCallback: true,
     },
     async function (
