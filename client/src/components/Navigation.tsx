@@ -10,7 +10,7 @@ const Navigation = () => {
   if (!userContext) return null;
 
   const { user, logout } = userContext;
-
+  const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:3001'
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -52,7 +52,7 @@ const Navigation = () => {
               </li>
             </>
           ) : (
-            <a href="http://localhost:3001/auth/google" className="btn loginButton">Login</a>
+            <a href={`${baseUrl}/auth/google`} className="btn loginButton">Login</a>
           )}
         </div>
       </div>
