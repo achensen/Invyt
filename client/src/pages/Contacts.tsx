@@ -1,10 +1,53 @@
-import React from 'react'
+import { useState } from "react";
 import { addContact } from "../utils/api";
 
 const Contacts = () => {
-  return (
-    <div>Contacts</div>
-  )
-}
+  const [form, setForm] = useState({
+    email: "",
+  });
 
-export default Contacts
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+      try {
+        const newContact = await addContact(
+          form.email
+      )
+      if (!newContact) {
+        console.error("Failed to create event.");
+        return;
+      }
+
+      // navigate(`/event/${newEvent._id}`);
+    } catch (error) {
+      console.error("Error creating event:", error);
+    }
+  };
+
+  return (
+    <>
+      <section>
+        <div className="container">
+          <form onSubmit={handleSubmit} className="event-form">
+            <div className="input-group">
+              <label>Add User</label>
+              <input
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="Search by e-mail"
+                required
+              />
+            </div>
+            <button type="submit" className="btn-primary">
+              Add User
+            </button>
+          </form>
+        </div>
+      </section>
+    </>
+  );
+};
+
+export default Contacts;

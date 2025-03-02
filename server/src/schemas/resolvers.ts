@@ -136,16 +136,20 @@ const resolvers = {
 
       return event;
     },
-    addContact: async (_: any, { contactId }: any, context: any) => {
+    addContact: async (_: any, { contactEmail }: any, context: any) => {
       if (!context.user) {
         throw new Error("Authentication required");
       }
-      const user = await User.findOneAndUpdate(
+      const user= await User.findOne({email: contactEmail})
+      if (!user) {
+        throw new Error("user not found");
+      }
+      const updatedUser = await User.findOneAndUpdate(
         { _id: context.user.userId },
-        { $addToSet: { contacts: contactId } },
+        { $addToSet: { contacts: user._id } },
         { new: true }
       );
-      return user;
+      return updatedUser;
     },
     removeContact: async (_: any, { contactId }: any, context: any) => {
       if (!context.user) {

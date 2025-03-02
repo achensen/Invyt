@@ -149,12 +149,12 @@ export const getUsers = async () => {
 
   return response.data.data?.users || [];
 };
-export const addContact = async (contactId: string) => {
+export const addContact = async (contactEmail: string) => {
   try {
     const res = await api.post("", {
       query: `
-       mutation AddContact($contactId: String!) {
-  addContact(contactId: ${contactId}) {
+       mutation AddContact($contactEmail: String!) {
+  addContact(contactEmail: $contactEmail) {
     _id
     email
     name
@@ -162,6 +162,7 @@ export const addContact = async (contactId: string) => {
   }
 }
       `,
+      variables: {contactEmail:contactEmail}
     });
 
     return res.data.data?.addContact || null;
