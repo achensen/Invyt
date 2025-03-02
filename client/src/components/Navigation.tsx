@@ -46,6 +46,9 @@ const Navigation = () => {
                     <Link className="dropdown-item" to="/profile">My Profile</Link>
                   </li>
                   <li>
+                    <Link className="dropdown-item" to="/contacts">My Contacts</Link>
+                  </li>
+                  <li>
                     <button className="dropdown-item logoutText" onClick={logout}>Logout</button>
                   </li>
                 </ul>

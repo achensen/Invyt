@@ -25,7 +25,7 @@ const createTransporter = async (email: string) => {
   if (!accessToken) {
     console.log(`🚨 Access Token missing for ${email}, attempting refresh.`);
     accessToken = await refreshGoogleToken(user.refreshToken);
-    
+
     if (!accessToken) {
       throw new Error(`Failed to refresh Google Access Token for ${email}.`);
     }
@@ -49,7 +49,6 @@ const createTransporter = async (email: string) => {
   });
 };
 
-
 const resolvers = {
   Query: {
     users: async () => await User.find(),
@@ -62,7 +61,10 @@ const resolvers = {
       const event = await Event.findById(id);
       if (!event) throw new Error("Event not found");
 
-      if (context.user && String(event.createdBy) === String(context.user.userId)) {
+      if (
+        context.user &&
+        String(event.createdBy) === String(context.user.userId)
+      ) {
         return event;
       }
 
@@ -70,7 +72,11 @@ const resolvers = {
     },
   },
   Mutation: {
-    createEvent: async (_: any, { title, date, location, recipients }: any, context: any) => {
+    createEvent: async (
+      _: any,
+      { title, date, location, recipients }: any,
+      context: any
+    ) => {
       if (!context.user) {
         throw new Error("Authentication required");
       }
@@ -118,7 +124,9 @@ const resolvers = {
         throw new Error("Invalid RSVP response. Must be 'yes' or 'no'.");
       }
 
-      const existingRSVP = event.attendees.find((attendee) => attendee.name === name);
+      const existingRSVP = event.attendees.find(
+        (attendee) => attendee.name === name
+      );
       if (existingRSVP) {
         throw new Error("You have already RSVP'd for this event.");
       }
@@ -127,6 +135,28 @@ const resolvers = {
       await event.save();
 
       return event;
+    },
+    addContact: async (_: any, { contactId }: any, context: any) => {
+      if (!context.user) {
+        throw new Error("Authentication required");
+      }
+      const user = await User.findOneAndUpdate(
+        { _id: context.user.userId },
+        { $addToSet: { contacts: contactId } },
+        { new: true }
+      );
+      return user;
+    },
+    removeContact: async (_: any, { contactId }: any, context: any) => {
+      if (!context.user) {
+        throw new Error("Authentication required");
+      }
+      const user = await User.findOneAndUpdate(
+        { _id: context.user.userId },
+        { $pull: { contacts: {contactId:contactId} } },
+        { new: true }
+      );
+      return user;
     },
   },
 };

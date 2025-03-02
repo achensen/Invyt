@@ -75,7 +75,11 @@ export const getEventById = async (id: string) => {
 };
 
 // 🔹 RSVP to an event
-export const rsvpToEvent = async (eventId: string, name: string, response: "yes" | "no") => {
+export const rsvpToEvent = async (
+  eventId: string,
+  name: string,
+  response: "yes" | "no"
+) => {
   try {
     const res = await api.post("", {
       query: `
@@ -95,7 +99,12 @@ export const rsvpToEvent = async (eventId: string, name: string, response: "yes"
 };
 
 // 🔹 Create an event
-export const createEvent = async (eventData: { title: string; date: string; location: string; recipients: string[] }) => {
+export const createEvent = async (eventData: {
+  title: string;
+  date: string;
+  location: string;
+  recipients: string[];
+}) => {
   try {
     const response = await api.post("", {
       query: `
@@ -124,4 +133,40 @@ export const loginUser = async () => {
 export const logoutUser = () => {
   removeToken();
   window.location.href = "/";
+};
+export const getUsers = async () => {
+  const response = await api.post("", {
+    query: `
+     query users {
+  users {
+    name
+    email
+    _id
+  }
+}
+    `,
+  });
+
+  return response.data.data?.users || [];
+};
+export const addContact = async (contactId: string) => {
+  try {
+    const res = await api.post("", {
+      query: `
+       mutation AddContact($contactId: String!) {
+  addContact(contactId: ${contactId}) {
+    _id
+    email
+    name
+    token
+  }
+}
+      `,
+    });
+
+    return res.data.data?.addContact || null;
+  } catch (error) {
+    console.error("RSVP GraphQL Error:", error);
+    throw error;
+  }
 };

@@ -40,6 +40,8 @@ const typeDefs = gql`
     login(email: String!, password: String!): AuthPayload
     createEvent(title: String!, date: String!, location: String!, recipients: [String!]!): Event
     rsvp(eventId: ID!, name: String!, response: String!): Event
+    addContact(contactId: String!): User
+    removeContact(contactId: String!): User
   }
 `;
 

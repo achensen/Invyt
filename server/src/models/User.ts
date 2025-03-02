@@ -6,6 +6,7 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   accessToken: { type: String },
   refreshToken: { type: String },
+  contacts: [{ type: mongoose.Schema.Types.ObjectId, ref: "User"}], // Track event creator
 });
 
 export default mongoose.model("User", UserSchema);

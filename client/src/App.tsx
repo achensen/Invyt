@@ -8,6 +8,7 @@ import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import RedirectIfLoggedIn from "./utils/RedirectIfLoggedIn";
+import Contacts from "./pages/Contacts";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="/create-event" element={<CreateEvent />} />
+            <Route path="/contacts" element={<Contacts />} />
           </Route>
           {/* Redirect Logged-in Users Away */}
           <Route element={<RedirectIfLoggedIn />}>
