@@ -6,6 +6,7 @@ const typeDefs = gql`
     name: String!
     email: String!
     token: String
+    contacts: [User]
   }
 
   type Event {
@@ -33,6 +34,7 @@ const typeDefs = gql`
     user(id: ID!): User
     events: [Event]
     event(id: ID!): Event
+    me: User
   }
 
   type Mutation {

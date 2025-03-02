@@ -1,10 +1,23 @@
-import { useState } from "react";
-import { addContact } from "../utils/api";
+import { useEffect, useState } from "react";
+import { addContact, getMe } from "../utils/api";
 
 const Contacts = () => {
   const [form, setForm] = useState({
     email: "",
   });
+const [contacts, setContacts] = useState([])
+useEffect(() => {
+  const getContacts= async ()=> {
+  const userData=  await getMe()
+  setContacts (userData)
+  }
+  getContacts()
+}, [])
+
+useEffect(() => {
+  console.log (contacts)
+}, [contacts])
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm({ ...form, [e.target.name]: e.target.value });

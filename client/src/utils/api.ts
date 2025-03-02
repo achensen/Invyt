@@ -134,6 +134,29 @@ export const logoutUser = () => {
   removeToken();
   window.location.href = "/";
 };
+
+export const getMe = async () => {
+  const response = await api.post("", {
+    query: `
+     query Me {
+  me {
+    _id
+    email
+    name
+    token
+    contacts {
+      _id
+      email
+      name
+    }
+  }
+}
+    `,
+  });
+
+  return response.data.data?.me || [];
+};
+
 export const getUsers = async () => {
   const response = await api.post("", {
     query: `

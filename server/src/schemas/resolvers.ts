@@ -51,8 +51,8 @@ const createTransporter = async (email: string) => {
 
 const resolvers = {
   Query: {
-    users: async () => await User.find(),
-    user: async (_: any, { id }: { id: string }) => await User.findById(id),
+    users: async () => await User.find().populate("contacts"),
+    user: async (_: any, { id }: { id: string }) => await User.findById(id).populate("contacts"),
     events: async (_: any, __: any, context: any) => {
       if (!context.user) throw new Error("Authentication required");
       return await Event.find({ createdBy: context.user.userId });
@@ -69,6 +69,14 @@ const resolvers = {
       }
 
       return { ...event.toObject(), attendees: [] };
+    },
+    me: async (_parent: any, _args: any, context: any) => {
+      // If the user is authenticated, find and return the user's information along with their thoughts
+      if (context.user) {
+        return User.findOne({ _id: context.user._id });
+      }
+      // If the user is not authenticated, throw an AuthenticationError
+      throw new Error("Could not authenticate user.");
     },
   },
   Mutation: {
