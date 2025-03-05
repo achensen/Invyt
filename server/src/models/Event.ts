@@ -10,6 +10,7 @@ const EventSchema = new mongoose.Schema({
     },
   ],
   location: { type: String, required: true },
+  time: { type: String, default:"TBA" },
   recipients: [{ type: String, required: true }], // Store recipient emails
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Track event creator
   attendees: [

@@ -71,9 +71,11 @@ const resolvers = {
       return { ...event.toObject(), attendees: [] };
     },
     me: async (_parent: any, _args: any, context: any) => {
+      console.log("somthing",context);
+      
       // If the user is authenticated, find and return the user's information along with their thoughts
       if (context.user) {
-        return User.findOne({ _id: context.user._id });
+        return User.findOne({ _id: context.user.userId }).populate("contacts");
       }
       // If the user is not authenticated, throw an AuthenticationError
       throw new Error("Could not authenticate user.");

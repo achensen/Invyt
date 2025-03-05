@@ -5,11 +5,11 @@ const Contacts = () => {
   const [form, setForm] = useState({
     email: "",
   });
-const [contacts, setContacts] = useState([])
+const [contacts, setContacts] = useState([]as any)
 useEffect(() => {
   const getContacts= async ()=> {
   const userData=  await getMe()
-  setContacts (userData)
+  setContacts (userData.contacts)
   }
   getContacts()
 }, [])
@@ -41,6 +41,12 @@ useEffect(() => {
   return (
     <>
       <section>
+        <div className="container">
+        {contacts?.length > 0 &&
+        contacts.map((contact:any)=>(<div>
+            {contact.name}
+        </div>))}
+        </div>
         <div className="container">
           <form onSubmit={handleSubmit} className="event-form">
             <div className="input-group">
