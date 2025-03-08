@@ -84,7 +84,7 @@ const resolvers = {
   Mutation: {
     createEvent: async (
       _: any,
-      { title, date, location, recipients }: any,
+      { title, date, location, recipients, activities }: any,
       context: any
     ) => {
       if (!context.user) {
@@ -98,6 +98,7 @@ const resolvers = {
         recipients,
         createdBy: context.user.userId,
         attendees: [],
+        activities
       });
 
       await event.save();
@@ -171,6 +172,21 @@ const resolvers = {
         { new: true }
       );
       return user;
+    },
+    updateVote: async (_parent: any, _args: any, context: any) => {
+      if (context.user) {
+      
+
+      //  const user = await User.findOneAndUpdate(
+      //     { _id: context.user._id },
+      //     { $addToSet: { savedBooks: book } },
+      //     {new: true}
+      //   );
+
+        // return user;
+      }
+      // throw AuthenticationError;
+      // ('You need to be logged in!');
     },
   },
 };

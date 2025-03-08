@@ -9,6 +9,15 @@ const typeDefs = gql`
     contacts: [User]
   }
 
+  type Activity {
+    name: String!
+    votes: [ID]
+  }
+
+  input ActivityInput {
+    name: String!
+  }
+
   type Event {
     _id: ID!
     title: String!
@@ -17,6 +26,7 @@ const typeDefs = gql`
     recipients: [String!]!
     createdBy: User!
     attendees: [RSVP!]
+    activities: [Activity]
   }
 
   type RSVP {
@@ -40,10 +50,11 @@ const typeDefs = gql`
   type Mutation {
     register(name: String!, email: String!, password: String!): AuthPayload
     login(email: String!, password: String!): AuthPayload
-    createEvent(title: String!, date: String!, location: String!, recipients: [String!]!): Event
+    createEvent(title: String!, date: String!, location: String!, recipients: [String!]!, activities: [ActivityInput]): Event
     rsvp(eventId: ID!, name: String!, response: String!): Event
     addContact(contactEmail: String!): User
     removeContact(contactId: String!): User
+    updateVote(revoting: Boolean, userId: ID!, selection: ID!, previousSelection: ID): Event
   }
 `;
 

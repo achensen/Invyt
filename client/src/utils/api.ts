@@ -66,6 +66,10 @@ export const getEventById = async (id: string) => {
           title
           date
           location
+          activities {
+            name
+            votes
+          }
         }
       }
     `,
@@ -104,12 +108,13 @@ export const createEvent = async (eventData: {
   date: string;
   location: string;
   recipients: string[];
+  activities: object[];
 }) => {
   try {
     const response = await api.post("", {
       query: `
-        mutation CreateEvent($title: String!, $date: String!, $location: String!, $recipients: [String!]!) {
-          createEvent(title: $title, date: $date, location: $location, recipients: $recipients) {
+        mutation CreateEvent($title: String!, $date: String!, $location: String!, $recipients: [String!]!, $activities: [ActivityInput]) {
+          createEvent(title: $title, date: $date, location: $location, recipients: $recipients, activities: $activities) {
             _id
           }
         }

@@ -6,7 +6,7 @@ const EventSchema = new mongoose.Schema({
   activities: [
     {
       name: { type: String, required: true },
-      votes: { type: Number,  required: true },
+      votes: [{ type:  mongoose.Schema.Types.ObjectId }],
     },
   ],
   location: { type: String, required: true },

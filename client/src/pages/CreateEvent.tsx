@@ -21,7 +21,7 @@ const CreateEvent = () => {
     time: "",
     location: "",
     recipients: [] as string[],
-    // activities: [""],
+    activities: [""],
   });
 
   const [email, setEmail] = useState("");
@@ -48,6 +48,7 @@ const CreateEvent = () => {
         date: form.date,
         location: form.location,
         recipients: form.recipients,
+        activities: form.activities.map(element=>({name:element}))
       });
 
       if (!newEvent) {
@@ -60,23 +61,23 @@ const CreateEvent = () => {
       console.error("Error creating event:", error);
     }
   };
-  // const handleAddActivityInput = () => {
-  //   setForm({ ...form, activities: [...form.activities, ""] });
-  // };
-//   const handleAddActivity = (e: React.ChangeEvent<HTMLInputElement>) =>{
-//     e.preventDefault()
-//     const activityName=e.target.name
-//     const activityValue=e.target.value
-//     const activityIndex=parseInt(activityName.split('-')[1])
-// console.log(activityIndex,activityValue);
-// setForm({...form,activities:[...form.activities.map((activity,index)=>{
-//   if (index===activityIndex) {
-//     return activityValue
-//   } else {
-//     return activity
-//   }
-// })]})
-  // }
+  const handleAddActivityInput = () => {
+    setForm({ ...form, activities: [...form.activities, ""] });
+  };
+  const handleAddActivity = (e: React.ChangeEvent<HTMLInputElement>) =>{
+    e.preventDefault()
+    const activityName=e.target.name
+    const activityValue=e.target.value
+    const activityIndex=parseInt(activityName.split('-')[1])
+console.log(activityIndex,activityValue);
+setForm({...form,activities:[...form.activities.map((activity,index)=>{
+  if (index===activityIndex) {
+    return activityValue
+  } else {
+    return activity
+  }
+})]})
+  }
   return (
     <div className="event-container">
       <h1 className="event-title">Create an Event</h1>
@@ -92,7 +93,7 @@ const CreateEvent = () => {
         </div>
         <div className="input-group">
           <label>Activity</label>
-          {/* {form?.activities?.length>0&&form.activities.map((activity: string, index: number) => (
+          {form?.activities?.length>0&&form.activities.map((activity: string, index: number) => (
             <input
               type="text"
               name={`activity-${index}`}
@@ -100,14 +101,14 @@ const CreateEvent = () => {
               onChange={handleAddActivity}
               required
             />
-          ))} */}
-          {/* <button
+          ))}
+          <button
             type="button"
             className="btn-secondary"
             onClick={handleAddActivityInput}
           >
             Add
-          </button> */}
+          </button>
         </div>
         <div className="input-group">
           <label>Date</label>

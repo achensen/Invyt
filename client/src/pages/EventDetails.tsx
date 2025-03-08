@@ -7,6 +7,7 @@ interface Event {
   title: string;
   date: string;
   location: string;
+  activities: object[]
 }
 
 const EventDetails = () => {
@@ -50,7 +51,11 @@ const EventDetails = () => {
         <p><strong>Date:</strong> {event.date}</p>
         <p><strong>Location:</strong> {event.location}</p>
       </div>
-
+    <div className="container mt-4">
+      {event?.activities?.length > 0 && event.activities.map((activity:any)=>(<div key={activity._id}> 
+        {activity.name}
+      </div>))}
+    </div>
       {/* Copyable Event Link */}
       <div className="copy-link-container mt-3">
         <label className="form-label">Shareable link:</label>
