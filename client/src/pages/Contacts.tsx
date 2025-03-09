@@ -28,13 +28,13 @@ useEffect(() => {
           form.email
       )
       if (!newContact) {
-        console.error("Failed to create event.");
+        console.error("Failed to add contact.");
         return;
       }
 
       // navigate(`/event/${newEvent._id}`);
     } catch (error) {
-      console.error("Error creating event:", error);
+      console.error("Error creating contact:", error);
     }
   };
 
