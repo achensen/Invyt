@@ -124,6 +124,7 @@ export const updateVote = async (
     activities {
       name
       votes
+      _id
     }
   }
 }

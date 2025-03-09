@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { getEventById, rsvpToEvent, updateVote } from "../utils/api";
+import { UserContext } from "../context/UserContext";
 
 interface Event {
   _id: string;
@@ -12,14 +13,40 @@ interface Event {
 
 const EventDetails = () => {
   const { id } = useParams<{ id: string }>();
+  const userContext: any = useContext(UserContext);
+  const { user} = userContext;
   const [event, setEvent] = useState<Event | null>(null);
   const [name, setName] = useState("");
   const [response, setResponse] = useState<"yes" | "no">("yes");
   const [copied, setCopied] = useState(false);
+  const [activities, setActivities] = useState([] as any);
+  const [voteId, setVoteId] = useState(null);
+// const [previousSelectionId, setPreviousSelectionId] = useState(null)
+
+  useEffect(() => {
+  console.log(voteId);
+  
+  
+  }, [voteId])
+  
+
+  useEffect(() => {
+   if (!(activities?.length > 0)) return
+   console.log(user);
+   activities.forEach((element: any)=>{
+    if (element.votes.includes(user._id)){
+      setVoteId(element._id)
+    }
+   })
+  }, [activities])
+  
 
   useEffect(() => {
     if (id) {
-      getEventById(id).then((data) => setEvent(data));
+      getEventById(id).then((data) => {
+        setEvent(data);
+        setActivities(data.activities);
+      });
     }
   }, [id]);
 
@@ -41,15 +68,22 @@ const EventDetails = () => {
     }
   };
 
-  const handleVote = (selectionId: string) => {
+  const handleVote = async (selectionId: string) => {
     // const newVote={
     //   selectionId:selectionId,
     //   eventId:id,
     //   revoting:false,
     //   previousSelectionId:"",
     // }
-    console.log("selectionID", selectionId)
-    updateVote( id || "",selectionId, false, "");
+    console.log("selectionID", selectionId);
+    const revoting = voteId? true: false
+    const previousSelectionId = voteId?voteId:""
+    const updatedEvent = await updateVote(id || "", selectionId, revoting, previousSelectionId);
+    if (updatedEvent.activities) {
+      console.log(updatedEvent.activities);
+      
+      setActivities(updatedEvent.activities);
+    }
   };
   if (!event) return <p>Loading...</p>;
 
@@ -66,15 +100,20 @@ const EventDetails = () => {
         </p>
       </div>
       <div className="container mt-4 d-flex flex-column align-items-center">
-        {event?.activities?.length > 0 &&
-          event.activities.map((activity: any) => (
+        {activities?.length > 0 &&
+          activities.map((activity: any) => (
             <div
               key={activity._id}
-              className="px-4 py-2 my-2 bg-light text-dark rounded w-50 text-center"
-              style={{ cursor: "pointer" }}
-              onClick={() => handleVote(activity._id)}
+              className="d-flex w-100 justify-content-center align-items-center"
             >
-              {activity.name}
+              <div
+                className="px-4 py-2 my-2 bg-light text-dark rounded w-50 text-center"
+                style={{ cursor: "pointer" }}
+                onClick={() => handleVote(activity._id)}
+              >
+                {activity.name}
+              </div>
+              <div className="mx-3">{activity?.votes?.length}</div>
             </div>
           ))}
       </div>
