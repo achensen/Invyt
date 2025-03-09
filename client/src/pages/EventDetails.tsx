@@ -21,23 +21,28 @@ const EventDetails = () => {
   const [copied, setCopied] = useState(false);
   const [activities, setActivities] = useState([] as any);
   const [voteId, setVoteId] = useState(null);
+  const [totalVotes, setTotalVotes] = useState(0)
 // const [previousSelectionId, setPreviousSelectionId] = useState(null)
 
   useEffect(() => {
-  console.log(voteId);
+  console.log(totalVotes);
   
   
-  }, [voteId])
+  }, [totalVotes])
   
 
   useEffect(() => {
    if (!(activities?.length > 0)) return
    console.log(user);
+   let count= 0
    activities.forEach((element: any)=>{
+    count=count+element.votes.length
+    //sets voteId to the activiyId that the user voted for
     if (element.votes.includes(user._id)){
       setVoteId(element._id)
     }
    })
+   setTotalVotes(count)
   }, [activities])
   
 
@@ -79,7 +84,7 @@ const EventDetails = () => {
     const revoting = voteId? true: false
     const previousSelectionId = voteId?voteId:""
     const updatedEvent = await updateVote(id || "", selectionId, revoting, previousSelectionId);
-    if (updatedEvent.activities) {
+    if (updatedEvent?.activities) {
       console.log(updatedEvent.activities);
       
       setActivities(updatedEvent.activities);
@@ -104,14 +109,21 @@ const EventDetails = () => {
           activities.map((activity: any) => (
             <div
               key={activity._id}
-              className="d-flex w-100 justify-content-center align-items-center"
+              className="d-flex w-100 justify-content-center align-items-center position-relative"
             >
               <div
-                className="px-4 py-2 my-2 bg-light text-dark rounded w-50 text-center"
-                style={{ cursor: "pointer" }}
+                className="px-4 py-2 my-2 bg-light text-dark rounded w-50 text-center "
+                style={{ cursor: "pointer", height: "5vh"}}
                 onClick={() => handleVote(activity._id)}
               >
-                {activity.name}
+                <div 
+                className= "rounded h-100"
+                style= {{backgroundColor: "red", width: `${(activity.votes.length/totalVotes)*100}%` }}>
+                </div>
+                
+                <div className= "position-absolute top-50 start-50 translate-middle">
+                  {activity.name}
+                </div>
               </div>
               <div className="mx-3">{activity?.votes?.length}</div>
             </div>

@@ -1,6 +1,6 @@
 import User from "../models/User.js";
 import Event from "../models/Event.js";
-// import mongoose from 'mongoose'; 
+// import mongoose from 'mongoose';
 import nodemailer from "nodemailer";
 import { refreshGoogleToken } from "../routes/auth.js"; // Import refresh function
 
@@ -177,17 +177,37 @@ const resolvers = {
       return user;
     },
     updateVote: async (_parent: any, args: any, context: any) => {
-      console.log ("Update Vote")
+      console.log("Update Vote");
       if (context.user) {
         // const selectionId= new mongoose.Types.ObjectId(args.selectionId)
-        const user = await Event.findOneAndUpdate(
-          { _id:args.eventId,"activities._id":args.selectionId},
-          { $addToSet: {"activities.$.votes":context.user.userId } },
-          {new:true}
-          // { arrayFilters: [{"i.name": "Movies"}]}
-        );
+        if (args.revoting) {
+          const user = await Event.findOneAndUpdate(
+            { _id: args.eventId },
+            {
+              $addToSet: { "activities.$[i].votes": context.user.userId },
+              $pull: { "activities.$[j].votes": context.user.userId },
+            },
 
-        return user;
+            {
+              arrayFilters: [
+                { "i._id": args.selectionId },
+                { "j._id": args.previousSelectionId },
+              ],
+              new: true,
+            }
+          );
+
+          return user;
+        } else {
+          const user = await Event.findOneAndUpdate(
+            { _id: args.eventId, "activities._id": args.selectionId },
+            { $addToSet: { "activities.$.votes": context.user.userId } },
+            { new: true }
+            // { arrayFilters: [{"i.name": "Movies"}]}
+          );
+
+          return user;
+        }
       }
       throw Error("You need to be logged in!");
     },
