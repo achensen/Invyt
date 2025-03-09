@@ -27,25 +27,53 @@ useEffect(() => {
         const newContact = await addContact(
           form.email
       )
+
       if (!newContact) {
         console.error("Failed to add contact.");
         return;
       }
-
+      console.log (newContact)
+      setContacts(newContact.contacts)
       // navigate(`/event/${newEvent._id}`);
     } catch (error) {
       console.error("Error creating contact:", error);
     }
   };
+const handleDelete = (contactId:string)=>{
+  console.log(contactId)
+}
 
   return (
     <>
       <section>
         <div className="container">
-        {contacts?.length > 0 &&
-        contacts.map((contact:any)=>(<div>
+        {/* {contacts?.length > 0 &&
+        contacts.map((contact:any)=>(<div key= {contact._id}>
             {contact.name}
-        </div>))}
+        </div>))} */}
+        <table className="table table-striped table-bordered rounded overflow-hidden">
+  <thead>
+    <tr>
+      <th className="col-5">Name</th> {/* 5/12 columns */}
+      <th className="col-5">Email</th> {/* 5/12 columns */}
+      <th className="col-2"></th> {/* 2/12 columns */}
+    </tr>
+  </thead>
+  <tbody>
+    {contacts?.length > 0 && contacts.map((contact: any) => (
+      <tr key={contact._id}>
+        <td>{contact.name}</td>
+        <td>{contact.email}</td>
+        <td className="d-flex justify-content-center">
+          <button className="btn btn-danger btn-sm" onClick={() => handleDelete(contact._id)}>
+            Delete
+          </button>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
         </div>
         <div className="container">
           <form onSubmit={handleSubmit} className="event-form">

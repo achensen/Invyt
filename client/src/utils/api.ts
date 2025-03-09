@@ -223,6 +223,11 @@ export const addContact = async (contactEmail: string) => {
     email
     name
     token
+    contacts {
+      _id
+      email
+      name
+    }
   }
 }
       `,

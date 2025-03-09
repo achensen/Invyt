@@ -74,7 +74,7 @@ const resolvers = {
       return { ...event.toObject(), attendees: [] };
     },
     me: async (_parent: any, _args: any, context: any) => {
-      console.log("somthing", context);
+      // console.log("somthing", context);
 
       // If the user is authenticated, find and return the user's information along with their thoughts
       if (context.user) {
@@ -162,7 +162,7 @@ const resolvers = {
         { _id: context.user.userId },
         { $addToSet: { contacts: user._id } },
         { new: true }
-      );
+      ).populate("contacts");
       return updatedUser;
     },
     removeContact: async (_: any, { contactId }: any, context: any) => {
