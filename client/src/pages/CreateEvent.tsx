@@ -97,6 +97,7 @@ setForm({...form,activities:[...form.activities.map((activity,index)=>{
             <input
               type="text"
               name={`activity-${index}`}
+              key={index}
               value={activity}
               onChange={handleAddActivity}
               required

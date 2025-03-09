@@ -67,6 +67,7 @@ export const getEventById = async (id: string) => {
           date
           location
           activities {
+            _id
             name
             votes
           }
@@ -103,6 +104,40 @@ export const rsvpToEvent = async (
 };
 
 // 🔹 Create an event
+export const updateVote = async ( 
+  eventId: string|undefined,
+  selectionId: string,
+  revoting: boolean,
+  previousSelectionId: string,
+  
+) => {
+  try {
+    const response = await api.post("", {
+      query: `
+      mutation UpdateVote($eventId: ID!, $selectionId: ID!, $revoting: Boolean, $previousSelectionId: ID) {
+  updateVote(eventId: $eventId, selectionId: $selectionId, revoting: $revoting, previousSelectionId: $previousSelectionId) {
+    _id
+    title
+    date
+    location
+    recipients
+    activities {
+      name
+      votes
+    }
+  }
+}
+      `,
+      variables: { selectionId,eventId, revoting,previousSelectionId },
+    });
+
+    return response.data.data?.updateVote || null;
+  } catch (error) {
+    console.error("Create Event GraphQL Error:", error);
+    throw error;
+  }
+};
+
 export const createEvent = async (eventData: {
   title: string;
   date: string;
@@ -128,6 +163,7 @@ export const createEvent = async (eventData: {
     throw error;
   }
 };
+
 
 // 🔹 Login User
 export const loginUser = async () => {

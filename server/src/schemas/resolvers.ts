@@ -1,8 +1,10 @@
 import User from "../models/User.js";
 import Event from "../models/Event.js";
+// import mongoose from 'mongoose'; 
 import nodemailer from "nodemailer";
 import { refreshGoogleToken } from "../routes/auth.js"; // Import refresh function
 
+// const ObjectId = mongoose.Types.ObjectId;
 // Function to create OAuth2 transporter
 const createTransporter = async (email: string) => {
   const user = await User.findOne({ email });
@@ -52,7 +54,8 @@ const createTransporter = async (email: string) => {
 const resolvers = {
   Query: {
     users: async () => await User.find().populate("contacts"),
-    user: async (_: any, { id }: { id: string }) => await User.findById(id).populate("contacts"),
+    user: async (_: any, { id }: { id: string }) =>
+      await User.findById(id).populate("contacts"),
     events: async (_: any, __: any, context: any) => {
       if (!context.user) throw new Error("Authentication required");
       return await Event.find({ createdBy: context.user.userId });
@@ -71,8 +74,8 @@ const resolvers = {
       return { ...event.toObject(), attendees: [] };
     },
     me: async (_parent: any, _args: any, context: any) => {
-      console.log("somthing",context);
-      
+      console.log("somthing", context);
+
       // If the user is authenticated, find and return the user's information along with their thoughts
       if (context.user) {
         return User.findOne({ _id: context.user.userId }).populate("contacts");
@@ -98,7 +101,7 @@ const resolvers = {
         recipients,
         createdBy: context.user.userId,
         attendees: [],
-        activities
+        activities,
       });
 
       await event.save();
@@ -151,7 +154,7 @@ const resolvers = {
       if (!context.user) {
         throw new Error("Authentication required");
       }
-      const user= await User.findOne({email: contactEmail})
+      const user = await User.findOne({ email: contactEmail });
       if (!user) {
         throw new Error("user not found");
       }
@@ -168,25 +171,25 @@ const resolvers = {
       }
       const user = await User.findOneAndUpdate(
         { _id: context.user.userId },
-        { $pull: { contacts: {contactId:contactId} } },
+        { $pull: { contacts: { contactId: contactId } } },
         { new: true }
       );
       return user;
     },
-    updateVote: async (_parent: any, _args: any, context: any) => {
+    updateVote: async (_parent: any, args: any, context: any) => {
+      console.log ("Update Vote")
       if (context.user) {
-      
+        // const selectionId= new mongoose.Types.ObjectId(args.selectionId)
+        const user = await Event.findOneAndUpdate(
+          { _id:args.eventId,"activities._id":args.selectionId},
+          { $addToSet: {"activities.$.votes":context.user.userId } },
+          {new:true}
+          // { arrayFilters: [{"i.name": "Movies"}]}
+        );
 
-      //  const user = await User.findOneAndUpdate(
-      //     { _id: context.user._id },
-      //     { $addToSet: { savedBooks: book } },
-      //     {new: true}
-      //   );
-
-        // return user;
+        return user;
       }
-      // throw AuthenticationError;
-      // ('You need to be logged in!');
+      throw Error("You need to be logged in!");
     },
   },
 };

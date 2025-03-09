@@ -10,8 +10,9 @@ const typeDefs = gql`
   }
 
   type Activity {
-    name: String!
+    name: String
     votes: [ID]
+    _id: ID
   }
 
   input ActivityInput {
@@ -54,7 +55,7 @@ const typeDefs = gql`
     rsvp(eventId: ID!, name: String!, response: String!): Event
     addContact(contactEmail: String!): User
     removeContact(contactId: String!): User
-    updateVote(revoting: Boolean, userId: ID!, selection: ID!, previousSelection: ID): Event
+    updateVote(revoting: Boolean, eventId: ID!, selectionId: ID!, previousSelectionId: ID): Event
   }
 `;
 

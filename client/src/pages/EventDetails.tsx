@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getEventById, rsvpToEvent } from "../utils/api";
+import { getEventById, rsvpToEvent, updateVote } from "../utils/api";
 
 interface Event {
   _id: string;
   title: string;
   date: string;
   location: string;
-  activities: object[]
+  activities: object[];
 }
 
 const EventDetails = () => {
@@ -41,6 +41,16 @@ const EventDetails = () => {
     }
   };
 
+  const handleVote = (selectionId: string) => {
+    // const newVote={
+    //   selectionId:selectionId,
+    //   eventId:id,
+    //   revoting:false,
+    //   previousSelectionId:"",
+    // }
+    console.log("selectionID", selectionId)
+    updateVote( id || "",selectionId, false, "");
+  };
   if (!event) return <p>Loading...</p>;
 
   return (
@@ -48,21 +58,33 @@ const EventDetails = () => {
       {/* Event Details Section */}
       <div className="event-details-container">
         <h1>{event.title}</h1>
-        <p><strong>Date:</strong> {event.date}</p>
-        <p><strong>Location:</strong> {event.location}</p>
+        <p>
+          <strong>Date:</strong> {event.date}
+        </p>
+        <p>
+          <strong>Location:</strong> {event.location}
+        </p>
       </div>
-    <div className="container mt-4">
-      {event?.activities?.length > 0 && event.activities.map((activity:any)=>(<div key={activity._id}> 
-        {activity.name}
-      </div>))}
-    </div>
+      <div className="container mt-4 d-flex flex-column align-items-center">
+        {event?.activities?.length > 0 &&
+          event.activities.map((activity: any) => (
+            <div
+              key={activity._id}
+              className="px-4 py-2 my-2 bg-light text-dark rounded w-50 text-center"
+              style={{ cursor: "pointer" }}
+              onClick={() => handleVote(activity._id)}
+            >
+              {activity.name}
+            </div>
+          ))}
+      </div>
       {/* Copyable Event Link */}
       <div className="copy-link-container mt-3">
         <label className="form-label">Shareable link:</label>
-        <input 
-          type="text" 
-          value={`${window.location.origin}/event/${id}`} 
-          readOnly 
+        <input
+          type="text"
+          value={`${window.location.origin}/event/${id}`}
+          readOnly
           className="copy-link-input form-control"
         />
         <button onClick={handleCopyLink} className="btn btn-secondary copy-btn">
