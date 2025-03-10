@@ -150,7 +150,7 @@ router.get(
       }
 
       // Generate JWT Token including Access Token
-      const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:3001'
+      const baseUrl = process.env.VITE_BASE_URL || 'http://localhost:3001'
       const token = jwt.sign(
         { 
           userId: user._id, 

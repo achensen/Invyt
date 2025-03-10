@@ -5,7 +5,7 @@ import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from "@ap
 import { setContext } from "@apollo/client/link/context";
 import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./assets/styles/index.css";host
+import "./assets/styles/index.css";
 import { UserProvider } from "./context/UserContext";
 
 // Create HTTP Link for Apollo Client
