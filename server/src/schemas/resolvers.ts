@@ -108,7 +108,7 @@ const resolvers = {
 
       try {
         const transporter = await createTransporter(context.user.email);
-        const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:3001'
+        const baseUrl = process.env.VITE_BASE_URL || 'http://localhost:3001'
 
         const mailOptions = {
           from: context.user.email,
@@ -118,8 +118,8 @@ const resolvers = {
             <h2>You're invited to ${title}!</h2>
             <p><strong>Date:</strong> ${date}</p>
             <p><strong>Location:</strong> ${location}</p>
-            <p>Click <a href=`${baseUrl}/event/${event._id}>here</a> to view the event details and RSVP.</p>
-          `,
+            <p>Click <a href="${baseUrl}/event/${event._id}">here</a> to view the event details and RSVP.</p>
+            `,
         };
 
         await transporter.sendMail(mailOptions);
