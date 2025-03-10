@@ -28,7 +28,7 @@ console.log("🔑 Ticketmaster API Key:", process.env.TICKETMASTER_API_KEY);
 // CORS Configuration
 app.use(
   cors({
-    origin: ["http://127.0.0.1:3000", "http://localhost:3000"],
+    origin: ["http://127.0.0.1:3000", "http://localhost:3000", "https://invyt.onrender.com"],
     credentials: true,
   })
 );

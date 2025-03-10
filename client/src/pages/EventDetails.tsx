@@ -32,17 +32,19 @@ const EventDetails = () => {
   
 
   useEffect(() => {
-   if (!(activities?.length > 0)) return
-   console.log(user);
-   let count= 0
-   activities.forEach((element: any)=>{
-    count=count+element.votes.length
-    //sets voteId to the activiyId that the user voted for
-    if (element.votes.includes(user._id)){
-      setVoteId(element._id)
-    }
-   })
-   setTotalVotes(count)
+    if (!(activities?.length > 0)) return
+    console.log(user);
+    //declare variable to keep track of vote count
+    let count= 0
+    activities.forEach((element: any)=>{
+      count=count+element.votes.length
+      //sets voteId to the activiyId that the user voted for
+      if (element.votes.includes(user._id)){
+        setVoteId(element._id)
+      }
+    })
+    setTotalVotes(count)
+    //set the total vote count
   }, [activities])
   
 
