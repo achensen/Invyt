@@ -169,7 +169,7 @@ export const createEvent = async (eventData: {
 
 // 🔹 Login User
 export const loginUser = async () => {
-  window.location.href = "http://localhost:3001/auth/google";
+  window.location.href = `${baseUrl}/auth/google`;
 };
 
 // 🔹 Logout User
