@@ -20,7 +20,7 @@ api.interceptors.request.use(async (config) => {
     const payload = JSON.parse(atob(token.split(".")[1]));
     if (payload.exp * 1000 < Date.now()) {
       console.log("⏳ Token expired, refreshing...");
-      const res = await axios.get("http://localhost:3001/auth/refresh-token", {
+      const res = await axios.get(`${baseUrl}/auth/refresh-token`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

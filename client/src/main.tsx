@@ -5,12 +5,12 @@ import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from "@ap
 import { setContext } from "@apollo/client/link/context";
 import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./assets/styles/index.css";
+import "./assets/styles/index.css";host
 import { UserProvider } from "./context/UserContext";
 
 // Create HTTP Link for Apollo Client
 const httpLink = createHttpLink({
-  uri: "http://localhost:3001/graphql",
+  uri: "/graphql",
 });
 
 // Dynamically attach JWT token for every request

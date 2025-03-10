@@ -124,6 +124,7 @@ router.get(
 );
 
 // Google Callback Route
+
 router.get(
   "/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
@@ -149,6 +150,7 @@ router.get(
       }
 
       // Generate JWT Token including Access Token
+      const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:3001'
       const token = jwt.sign(
         { 
           userId: user._id, 
@@ -163,7 +165,7 @@ router.get(
       console.log("Google Login Successful - Redirecting with Token");
 
       // Redirect back to frontend with token
-      res.redirect(`http://localhost:3000?token=${token}`);
+      res.redirect(`${baseUrl}?token=${token}`);
     } catch (error) {
       console.error("Error during Google callback:", error);
       res.status(500).json({ message: "Internal Server Error" });
