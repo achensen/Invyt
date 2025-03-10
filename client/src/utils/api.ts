@@ -2,8 +2,9 @@ import axios from "axios";
 import { getToken, setToken, removeToken } from "./auth";
 
 // Create Axios Instance
+const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:3001'
 const api = axios.create({
-  baseURL: "http://localhost:3001/graphql",
+  baseURL:  `${baseUrl}/graphql`,
   headers: { "Content-Type": "application/json" },
 });
 
