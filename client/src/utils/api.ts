@@ -2,7 +2,9 @@ import axios from "axios";
 import { getToken, setToken, removeToken } from "./auth";
 
 // Create Axios Instance
-const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:3001'
+// const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:3001'
+const baseUrl = import.meta.env.VITE_BACKEND_URL || 'https://invyt.onrender.com';
+
 const api = axios.create({
   baseURL:  `${baseUrl}/graphql`,
   headers: { "Content-Type": "application/json" },

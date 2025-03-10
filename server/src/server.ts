@@ -30,6 +30,8 @@ app.use(
   cors({
     origin: ["http://127.0.0.1:3000", "http://localhost:3000", "https://invyt.onrender.com"],
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow these HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allow headers
   })
 );
 
