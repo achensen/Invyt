@@ -34,13 +34,8 @@ app.use(
 );
 
 app.use(express.json());
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../../client/dist')));
+app.use(express.urlencoded({ extended: true })); 
 
-  app.get('*', (_req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
-  });
-}
 
 // Configure Sessions (Required for Passport)
 app.use(
@@ -87,6 +82,14 @@ server.start().then(() => {
       },
     })
   );
+
+  if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../../client/dist')));
+  
+    app.get('*', (_req: Request, res: Response) => {
+      res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
+    });
+  }
 
   const PORT = process.env.PORT || 3001;
   app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

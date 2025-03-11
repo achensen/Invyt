@@ -108,7 +108,7 @@ const resolvers = {
 
       try {
         const transporter = await createTransporter(context.user.email);
-        const baseUrl = process.env.VITE_BASE_URL || 'http://localhost:3001'
+        const baseUrl = process.env.VITE_BASE_URL || 'http://localhost:3000'
 
         const mailOptions = {
           from: context.user.email,
