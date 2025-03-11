@@ -121,6 +121,7 @@ const EventDetails = () => {
                 <div 
                 className= "rounded h-100"
                 style= {{backgroundColor: "red", width: `${(activity.votes.length/totalVotes)*100}%` }}>
+                  {/* style= {{backgroundColor: "red", width: `${totalVotes==0?"0":(activity.votes.length/totalVotes)*100}%` }}> */}
                 </div>
                 
                 <div className= "position-absolute top-50 start-50 translate-middle">
