@@ -130,7 +130,12 @@ const EventDetails = () => {
                   style={{ cursor: "pointer", height: "5vh" }}
                   onClick={() => handleVote(activity._id)}
                 >
-                  <span
+                  <div 
+                className= "rounded h-100"
+                style= {{backgroundColor: "teal", width: `${(activity.votes.length/totalVotes)*100}%` }}>
+                  {/* style= {{backgroundColor: "red", width: `${totalVotes==0?"0":(activity.votes.length/totalVotes)*100}%` }}> */}
+                </div>
+                  {/* <span
                     className="rounded h-100"
                     style={{
                       backgroundColor: "#1dd1a1",
@@ -141,7 +146,7 @@ const EventDetails = () => {
                           : (activity.votes.length / totalVotes) * 100
                       }%`,
                     }}
-                  ></span>
+                  ></span> */}
 
                   <div className="position-absolute top-50 start-50 translate-middle">
                     {activity.name}
