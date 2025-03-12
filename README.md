@@ -20,12 +20,12 @@ This project features **Google OAuth authentication**, event creation, email inv
 - **Email Service:** Nodemailer  
 
 ---
-
+## Deployment Link: https://invyt.onrender.com/
 ## **🛠 Setup Instructions**
 
 ### **1️⃣ Clone the Repository**
 ```sh
-git clone https://github.com/your-username/invyt.git
+git clone https://github.com/achensen/Invyt
 cd invyt
 ```
 
@@ -108,7 +108,16 @@ This will:
 
 ---
 
+## Contributions
+Michael Mosquera, Khadijih Garcia, and Erin Jacobsen
+ 
+## Contact Information
+* Michael Mosquera - My [GitHub Account Link](https://github.com/Mimosquera)
+* Khadijih Garcia - My [GitHub Account Link](https://github.com/KhadijihG)
+* Erin Jacobsen - My  [GitHub Account Link](https://github.com/achensen)
+ 
+## Image credit : by Bob Dmyt from Pixabay: Image by <a href="https://pixabay.com/users/ua_bob_dmyt_ua-8820017/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=4529717">Bob Dmyt</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=4529717">Pixabay</a>
 ## **📄 License**
 This project is **open-source** and available under the **MIT License**.
 
----
+## Comments: We did receive help on this project from tutoring and utilized some edx class materials for starter code . The app is not finished with full functionality, but after the cohort is complete we want to continute working on it.  
