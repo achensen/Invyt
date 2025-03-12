@@ -96,7 +96,16 @@ const EventDetails = () => {
   if (!event) return <p>Loading...</p>;
 
   return (
-    <div className="container mt-4">
+    <div
+      className="container mt-4"
+      style={{
+        backgroundColor: "rgba(107, 129, 255, 0.6) ",
+        padding: "10px",
+        borderRadius: "5px",
+        color: "#ffffff",
+        display: "inline-block",
+      }}
+    >
       {/* Event Details Section */}
       <div className="event-details-container">
         <h1>{event.title}</h1>
@@ -122,9 +131,9 @@ const EventDetails = () => {
                   onClick={() => handleVote(activity._id)}
                 >
                   <span
-                    className= "rounded h-100"
+                    className="rounded h-100"
                     style={{
-                      backgroundColor: "red",
+                      backgroundColor: "#1dd1a1",
                       height: "100%",
                       width: `${
                         totalVotes === 0
@@ -138,7 +147,22 @@ const EventDetails = () => {
                     {activity.name}
                   </div>
                 </div>
-                <div className="mx-3">{activity?.votes?.length}</div>
+                <div
+                  className="mx-3"
+                  style={{
+                    background: "white",
+                    color: "black",
+                    width: "40px", 
+                    height: "40px", 
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: "50%", 
+                    fontWeight: "bold",
+                  }}
+                >
+                  {activity?.votes?.length}{" "}
+                </div>
               </div>
             );
           })}

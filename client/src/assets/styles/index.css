@@ -354,7 +354,7 @@ button:hover {
 
 /* Links */
 a {
-  color: var(--accent-color);
+  color: var(--text-color);
   font-weight: 500;
   text-decoration: none;
 }
