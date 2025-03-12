@@ -5,7 +5,7 @@
   --accent-color: #b2b0fd63;
   --text-color: #ffffff;
   --background-image: url('/images/hands.jpg');
-  /* --background-color: #222f3e; */
+  --background-color: #222f3e;
   --navbar-bg: #341f97;
   --navbar-hover: #000000;
   --button-hover: #4863ff;
@@ -26,6 +26,11 @@ html, body {
   flex-direction: column;
   width: 100vw;
 }
+
+/* .landing-banner {
+  background: var(--background-image) no-repeat center center fixed;
+  background-size: cover;
+} */
 
 /* Full Page Layout */
 .app-container {
