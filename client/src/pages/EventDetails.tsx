@@ -14,39 +14,35 @@ interface Event {
 const EventDetails = () => {
   const { id } = useParams<{ id: string }>();
   const userContext: any = useContext(UserContext);
-  const { user} = userContext;
+  const { user } = userContext;
   const [event, setEvent] = useState<Event | null>(null);
   const [name, setName] = useState("");
   const [response, setResponse] = useState<"yes" | "no">("yes");
   const [copied, setCopied] = useState(false);
   const [activities, setActivities] = useState([] as any);
   const [voteId, setVoteId] = useState(null);
-  const [totalVotes, setTotalVotes] = useState(0)
-// const [previousSelectionId, setPreviousSelectionId] = useState(null)
+  const [totalVotes, setTotalVotes] = useState(0);
+  // const [previousSelectionId, setPreviousSelectionId] = useState(null)
 
   useEffect(() => {
-  console.log(totalVotes);
-  
-  
-  }, [totalVotes])
-  
+    console.log(totalVotes);
+  }, [totalVotes]);
 
   useEffect(() => {
-    if (!(activities?.length > 0)) return
+    if (!(activities?.length > 0)) return;
     console.log(user);
     //declare variable to keep track of vote count
-    let count= 0
-    activities.forEach((element: any)=>{
-      count=count+element.votes.length
+    let count = 0;
+    activities.forEach((element: any) => {
+      count = count + element.votes.length;
       //sets voteId to the activiyId that the user voted for
-      if (element.votes.includes(user._id)){
-        setVoteId(element._id)
+      if (element.votes.includes(user._id)) {
+        setVoteId(element._id);
       }
-    })
-    setTotalVotes(count)
+    });
+    setTotalVotes(count);
     //set the total vote count
-  }, [activities])
-  
+  }, [activities]);
 
   useEffect(() => {
     if (id) {
@@ -83,12 +79,17 @@ const EventDetails = () => {
     //   previousSelectionId:"",
     // }
     console.log("selectionID", selectionId);
-    const revoting = voteId? true: false
-    const previousSelectionId = voteId?voteId:""
-    const updatedEvent = await updateVote(id || "", selectionId, revoting, previousSelectionId);
+    const revoting = voteId ? true : false;
+    const previousSelectionId = voteId ? voteId : "";
+    const updatedEvent = await updateVote(
+      id || "",
+      selectionId,
+      revoting,
+      previousSelectionId
+    );
     if (updatedEvent?.activities) {
       console.log(updatedEvent.activities);
-      
+
       setActivities(updatedEvent.activities);
     }
   };
@@ -108,29 +109,39 @@ const EventDetails = () => {
       </div>
       <div className="container mt-4 d-flex flex-column align-items-center">
         {activities?.length > 0 &&
-          activities.map((activity: any) => (
-            <div
-              key={activity._id}
-              className="d-flex w-100 justify-content-center align-items-center position-relative"
-            >
+          activities.map((activity: any) => {
+            console.log(totalVotes);
+            return (
               <div
-                className="px-4 py-2 my-2 bg-light text-dark rounded w-50 text-center "
-                style={{ cursor: "pointer", height: "5vh"}}
-                onClick={() => handleVote(activity._id)}
+                key={activity._id}
+                className="d-flex w-100 justify-content-center align-items-center position-relative"
               >
-                <div 
-                className= "rounded h-100"
-                style= {{backgroundColor: "red", width: `${totalVotes === 0 ? "0" :(activity.votes.length/totalVotes)*100}%` }}>
-              
+                <div
+                  className="px-4 py-2 my-2 bg-light text-dark rounded w-50 text-center "
+                  style={{ cursor: "pointer", height: "5vh" }}
+                  onClick={() => handleVote(activity._id)}
+                >
+                  <span
+                    className= "rounded h-100"
+                    style={{
+                      backgroundColor: "red",
+                      height: "100%",
+                      width: `${
+                        totalVotes === 0
+                          ? "0"
+                          : (activity.votes.length / totalVotes) * 100
+                      }%`,
+                    }}
+                  ></span>
+
+                  <div className="position-absolute top-50 start-50 translate-middle">
+                    {activity.name}
+                  </div>
                 </div>
-                
-                <div className= "position-absolute top-50 start-50 translate-middle">
-                  {activity.name}
-                </div>
+                <div className="mx-3">{activity?.votes?.length}</div>
               </div>
-              <div className="mx-3">{activity?.votes?.length}</div>
-            </div>
-          ))}
+            );
+          })}
       </div>
       {/* Copyable Event Link */}
       <div className="copy-link-container mt-3">
