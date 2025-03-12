@@ -4,7 +4,8 @@
   --secondary-color: #1dd1a1;
   --accent-color: #b2b0fd63;
   --text-color: #ffffff;
-  --background-color: #222f3e;
+  --background-image: url('/images/hands.jpg');
+  /* --background-color: #222f3e; */
   --navbar-bg: #341f97;
   --navbar-hover: #000000;
   --button-hover: #4863ff;
@@ -17,7 +18,9 @@ html, body {
   margin: 0;
   padding: 0;
   font-family: "Inter", sans-serif;
-  background-color: var(--background-color);
+  background: var(--background-image) no-repeat center center fixed;
+  background-size: cover;
+  /* background-color: var(--background-color); */
   color: var(--text-color);
   display: flex;
   flex-direction: column;

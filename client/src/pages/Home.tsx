@@ -12,7 +12,10 @@ const Home = () => {
 
   // Show this message if no user is logged in
   if (!user) {
-    return <h2 className="text-center mt-4">Log in with Google to send an Invyt!</h2>;
+    return <h2 className="text-center mt-4"
+    style={{ backgroundColor: "rgba(107, 129, 255, 0.8) ",  padding: "10px", borderRadius: "5px", color: "white" }}
+    >Log in with Google to send an Invyt!</h2>;
+    
   }
 
  // if (!user) {
