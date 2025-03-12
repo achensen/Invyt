@@ -26,7 +26,7 @@ const Login = () => {
   };
 
   return (
-    <div className="container mt-5 text-center">
+    <div className="container mt-5 text-center" style={{ backgroundColor: "rgba(107, 129, 255, 0.6) ",  padding: "10px", borderRadius: "5px", color: "#ffffff",display: "inline-block" }}>
       <h1>Login to Invyt</h1>
       <p className="lead">Sign in with your Google account to continue.</p>
 

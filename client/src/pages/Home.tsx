@@ -13,7 +13,7 @@ const Home = () => {
   // Show this message if no user is logged in
   if (!user) {
     return <div className="container mt-4 landing-banner"><h2 className="text-center mt-4 landing-banner"
-    style={{ backgroundColor: "rgba(107, 129, 255, 0.5) ",  padding: "10px", borderRadius: "5px", color: "#ffffff",display: "inline-block" }}
+    style={{ backgroundColor: "rgba(107, 129, 255, 0.6) ",  padding: "10px", borderRadius: "5px", color: "#ffffff",display: "inline-block" }}
     >Log in with Google to send an Invyt!</h2></div>;
     
   }
@@ -23,8 +23,8 @@ const Home = () => {
   // }
 
   return (
-    <div className="container mt-4 landing-banner">
-      <h1>Welcome to Invyt</h1>
+    <div className="container mt-4 landing-banner" style={{ backgroundColor: "rgba(107, 129, 255, 0.6) ",  padding: "10px", borderRadius: "5px", color: "#ffffff",display: "inline-block" }}>
+      <h1>Welcome to Invyt </h1>
       <p className="text-center">Create, share, and manage your events seamlessly.</p>
 
       {/* Display local events */}
